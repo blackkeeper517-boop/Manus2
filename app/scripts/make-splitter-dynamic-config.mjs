@@ -1,0 +1,14 @@
+import { readFileSync, writeFileSync } from "node:fs";
+const path = "n8n/HERMES_CHAT_CHUNK_SPLITTER.js";
+let source = readFileSync(path, "utf8");
+const start = source.indexOf('// Authoritative page registry.');
+const end = source.indexOf('const output = [];');
+if (start < 0 || end < 0 || end <= start) throw new Error("config block not found");
+const replacement = `// Page registry is built dynamically from the current n8n input items.\n// Match page_id exactly; never infer from names, email, length, or position.\nlet MASTERCONFIG = [];\nlet PAGE_BY_ID = new Map();\n\n`;
+source = source.slice(0, start) + replacement + source.slice(end);
+const oldLoop = 'for (const item of $input.all()) {\n  const source = item.json ?? {};\n  const graph = source.facebook_response ?? source.body ?? source;';
+const newLoop = 'const inputItems = $input.all();\n\n// Accept either one config object per item or a single item containing an array.\nfor (const item of inputItems) {\n  const value = item.json ?? {};\n  const candidates = Array.isArray(value) ? value : Array.isArray(value.data) && !value.facebook_response ? value.data : [value];\n  for (const candidate of candidates) {\n    const pageId = String(candidate?.page_id ?? candidate?.pageId ?? "");\n    if (!pageId || !candidate || typeof candidate !== "object") continue;\n    if (!MASTERCONFIG.some(page => String(page.page_id) === pageId)) MASTERCONFIG.push({\n      page_index: candidate.page_index ?? candidate.row_number ?? null,\n      page_id: pageId,\n      page_name: candidate.page_name ?? candidate.pageName ?? null,\n      system_status: String(candidate.system_status ?? candidate.status ?? "ON").toUpperCase(),\n      assigned_agent: candidate.assigned_agent ?? candidate.admin_name ?? null,\n      assigned_hashtag: candidate.assigned_hashtag ?? candidate.assigned_Hashtag ?? null,\n    });\n  }\n}\nPAGE_BY_ID = new Map(MASTERCONFIG.map(page => [String(page.page_id), page]));\n\nfor (const item of inputItems) {\n  const source = item.json ?? {};\n  const graph = source.facebook_response ?? source.body ?? source;';
+if (!source.includes(oldLoop)) throw new Error("input loop not found");
+source = source.replace(oldLoop, newLoop);
+writeFileSync(path, source);
+console.log("splitter now derives MASTERCONFIG from input items");

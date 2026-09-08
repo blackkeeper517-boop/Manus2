@@ -1,0 +1,1376 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "url": "=https://graph.facebook.com/v20.0/{{ $json.page_id }}/conversations?fields=id,updated_time,message_count,unread_count,participants,can_reply,messages.limit(15){id,message,created_time,from{id,name},is_echo,attachments{mime_type,name,file_url},shares{name,link},sticker}",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "limit",
+              "value": "30"
+            },
+            {
+              "name": "access_token",
+              "value": "={{ $json.access_token }}"
+            },
+            {
+              "name": "since",
+              "value": "={{ $now.setZone('Asia/Bangkok').minus({ minute: 300 }).toFormat('yyyy-LL-dd HH:mm:ss') }}"
+            },
+            {
+              "name": "until",
+              "value": "={{ $now.setZone('Asia/Bangkok').toFormat('yyyy-LL-dd HH:mm:ss') }}"
+            }
+          ]
+        },
+        "options": {
+          "allowUnauthorizedCerts": false
+        }
+      },
+      "id": "6eb5f21e-cce4-4ded-b979-635dc819e9fb",
+      "name": "🌌HERMES_DATA_JOURNEY1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        432,
+        800
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "//⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘\n// 🎯 ORDER_SNIPER_X : PERFECT PURE-TEXT ENGINE V.67 LOCK COD<->COT FINAL\n//⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘\nconst ARMY_APP_ID = \"2166169297530889\";\nconst masterNode = $(\"UNIFIED META HYDRA INGESTOR2\").first().json;\nconst finalOrderTime = masterNode.sc_timestamp || \"DATA_MISSING\";\nconst dateTagStrinG = masterNode.sc_readable_date || \"DATA_MISSING\";\nconst items = $input.all();\nconst output = []; const seen = new Set();\n\nconst MASTERCONFIG = [\n  { \"page_index\": \"BB_01\", \"page_id\": \"103411062505149\", \"page_name\": \"🎀BBεїзเบอร์หนึ่งสโตร์\", \"system_status\": \"ON\", \"assigned_agent\": \"#ไนท์รา\", \"assigned_hashtag\": \"🔮#BB_ORDER_01\" },\n  { \"page_index\": \"BB_02\", \"page_id\": \"113923148350742\", \"page_name\": \"🎶BB ↠ STORE\", \"system_status\": \"ON\", \"assigned_agent\": \"#Venika\", \"assigned_hashtag\": \"🔮#BB_ORDER_02\" },\n  { \"page_index\": \"BB_03\", \"page_id\": \"111414924711459\", \"page_name\": \"🍇BBสโตร์.\", \"system_status\": \"ON\", \"assigned_agent\": \"#Mali\", \"assigned_hashtag\": \"🔮#BB_ORDER_03\" },\n  { \"page_index\": \"BB_04\", \"page_id\": \"1047257891810878\", \"page_name\": \"💗Bb store๐\", \"system_status\": \"ON\", \"assigned_agent\": \"#🍉TANGMO\", \"assigned_hashtag\": \"🔮#BB_ORDER_04\" },\n  { \"page_index\": \"BB_05\", \"page_id\": \"1064404466767377\", \"page_name\": \"เจ๊บี 🅱🅱\", \"system_status\": \"ON\", \"assigned_agent\": \"#👑เจ๊บี\", \"assigned_hashtag\": \"🔮#BB_ORDER_05\" },\n  { \"page_index\": \"BB_06\", \"page_id\": \"1235719106287717\", \"page_name\": \"🛒ร้าน:เจ๊บี\", \"system_status\": \"ON\", \"assigned_agent\": \"#🍀ใบบัว\", \"assigned_hashtag\": \"🔮#BB_ORDER_06\" },\n  { \"page_index\": \"BB_07\", \"page_id\": \"1032290633303246\", \"page_name\": \"💬ร้าน:เจ๊ B\", \"system_status\": \"ON\", \"assigned_agent\": \"💬#\", \"assigned_hashtag\": \"🔮#BB_ORDER_07\" }\n];\n\n// ------------------------------------------------------------\n// 1) PRODUCT_MASTER: สินค้าทั้งหมดจาก PRICE_MASTER\n// emoji ต้องใช้เป็นสี่เหลี่ยมสีตามที่กำหนดในโหนด ไม่เดาจากหน้าบ้าน\n// ------------------------------------------------------------\nconst PRODUCT_MASTER = {\n  VESS_MINT_COOL: { name: 'VESS_MINT_COOL', thName: 'เวสมิ้นท์คูล', emo: '🟩', keywords: ['VESS_MINT_COOL', 'VESS MINT COOL', 'เวสมิ้นท์คูล', 'เวสมิ้นคูล'] },\n  VESS_MINT_MENTHOL: { name: 'VESS_MINT_MENTHOL', thName: 'เวสมิ้นท์เมนทอล', emo: '🟩', keywords: ['VESS_MINT_MENTHOL', 'VESS MINT MENTHOL', 'เวสมิ้นท์เมนทอล'] },\n  GOLD_MOUNT_GREEN_WHITE: { name: 'GOLD_MOUNT_GREEN_WHITE', thName: 'โกลด์เมาท์เขียวขาว', emo: '🟩', keywords: ['GOLD_MOUNT_GREEN_WHITE', 'GOLD MOUNT GREEN WHITE', 'โกลด์เมาท์เขียวขาว'] },\n  MILANO_MENTHOL: { name: 'MILANO_MENTHOL', thName: 'มิลาโน่เมนทอล', emo: '🟩', keywords: ['MILANO_MENTHOL', 'MILANO GREEN', 'มิลาโน่เมนทอล', 'มิลาโน่เขียว', 'มิเมนทอล'] },\n  MOND_GREEN: { name: 'MOND_GREEN', thName: 'ม่อนเขียว', emo: '🟩', keywords: ['MOND_GREEN', 'MOND GREEN', 'ม่อนเขียว', 'ม่อนเขีย', 'ม่อนเย็น', 'ม่อน เขียว', 'ม่อนเขีย ว'] },\n  PLATINUM_GREEN: { name: 'PLATINUM_GREEN', thName: 'แพลตตินั่มเขียว', emo: '🟩', keywords: ['PLATINUM_GREEN', 'PLATINUM GREEN', 'แพลตตินั่มเขียว', 'แพตตินั่มเขียว'] },\n  SEVIOS_GREEN: { name: 'SEVIOS_GREEN', thName: 'ซีวอสเขียว', emo: '🟩', keywords: ['SEVIOS_GREEN', 'SEVIOS GREEN', 'ซีวอสเขียว', 'ชีวอสเขียว'] },\n  SMS_GREEN: { name: 'SMS_GREEN', thName: 'เอสเอ็มเอสเขียว', emo: '🟩', keywords: ['SMS_GREEN', 'SMS GREEN', 'เอสเอ็มเอสเขียว'] },\n  TEXAS_GREEN: { name: 'TEXAS_GREEN', thName: 'เท็กซัสเขียว', emo: '🟩', keywords: ['TEXAS_GREEN', 'TEXAS GREEN', 'เท็กซัสเขียว'] },\n  VESS_GREEN: { name: 'VESS_GREEN', thName: 'เวสเขียว', emo: '🟩', keywords: ['VESS_GREEN', 'VESS GREEN', 'Vess เขียว', 'เวสเขียว'] },\n  VESS_GREEN_SLIMS: { name: 'VESS_GREEN_SLIMS', thName: 'เวสเขียวเล็ก', emo: '🟩', keywords: ['VESS_GREEN_SLIMS', 'VESS GREEN SLIMS', 'เวสเขียวเล็ก'] },\n  VESS_MINT: { name: 'VESS_MINT', thName: 'เวสมิ้นท์', emo: '🟩', keywords: ['VESS_MINT', 'VESS MINT', 'เวสมิ้นท์', 'เวสมิ้น'] },\n  VOXX_GREEN: { name: 'VOXX_GREEN', thName: 'วอคเขียว', emo: '🟩', keywords: ['VOXX_GREEN', 'VOXX GREEN', 'VOXX', 'Voxx เขัยว', 'Voxx เขียว', 'วอคเขียว', 'วอค เขียว', 'ว็อกเขียว'] },\n  TEXAS_BLUE: { name: 'TEXAS_BLUE', thName: 'เท็กซัสฟ้า', emo: '🟦', keywords: ['TEXAS_BLUE', 'TEXAS BLUE', 'เท็กซัสฟ้า', 'เท็กซัสน้ำเงิน'] },\n  VESS_GREEN_BLACK: { name: 'VESS_GREEN_BLACK', thName: 'เวสเขียวดำ', emo: '🟩', keywords: ['VESS_GREEN_BLACK', 'VESS GREEN BLACK', 'เวสเขียวดำ', 'เวสเขียว ดำ'] },\n  SIERRA_GREEN: { name: 'SIERRA_GREEN', thName: 'เซียร่าเขียว', emo: '🟩', keywords: ['SIERRA_GREEN', 'SIERRA GREEN', 'SIERRA เขียว', 'SIERRA เขยีว', 'เซียร่าเขียว', 'เซียร่าเขยีว', 'เซียร์ร่าเขียว'] },\n\n  SEVIOS_RED: { name: 'SEVIOS_RED', thName: 'ซีวอสแดง', emo: '🟥', keywords: ['SEVIOS_RED', 'SEVIOS RED', 'ซีวอสแดง', 'ชีวอสแดง'] },\n  ROYAL_RED: { name: 'ROYAL_RED', thName: 'รอยัลแดง', emo: '🟥', keywords: ['ROYAL_RED', 'ROYAL RED', 'รอยัลแดง'] },\n  CAVALLO_RED: { name: 'CAVALLO_RED', thName: 'คาวาโร่แดง', emo: '🟥', keywords: ['CAVALLO_RED', 'CAVALO_RED', 'คาวาโร่แดง', 'คาวาไร่แดง'] },\n  SIERRA_RED: { name: 'SIERRA_RED', thName: 'เซียร่าแดง', emo: '🟥', keywords: ['SIERRA_RED', 'SIERRA RED', 'เซียร่าแดง', 'เชียร่าแดง'] },\n  MILANO_KINGS: { name: 'MILANO_KINGS', thName: 'มิลาโน่คิงส์', emo: '🟥', keywords: ['MILANO_KINGS', 'MILANO KINGS', 'มิลาโน่คิง', 'มิราโน่แดง', 'มิลาโน่แดงเทา'] },\n  VESS_RED: { name: 'VESS_RED', thName: 'เวสแดง', emo: '🟥', keywords: ['VESS_RED', 'VESS RED', 'เวสแดง', 'เวส แดง'] },\n  MOND_GOLD: { name: 'MOND_GOLD', thName: 'ม่อนทอง', emo: '🟨', keywords: ['MOND_GOLD', 'MOND GOLD', 'ม่อนทอง', 'ม่อนร้อน'] },\n  VESS_GOLD: { name: 'VESS_GOLD', thName: 'เวสทอง', emo: '🟨', keywords: ['VESS_GOLD', 'VESS GOLD', 'เวสทอง', 'เวสโกล'] },\n  JHON_BLACK: { name: 'JHON_BLACK', thName: 'จอนอ่อน', emo: '⬛', keywords: ['JHON_BLACK', 'JHON BLACK', 'จอนอ่อน'] },\n  PLATINUM_BLACK: { name: 'PLATINUM_BLACK', thName: 'แพลตตินั่มดำ', emo: '⬛', keywords: ['PLATINUM_BLACK', 'PLATINUM BLACK', 'Platinum Black', 'PLATINUMHOTBLACK', 'แพลตตินั่มดำ', 'แพตตินั่มดำ'] },\n\n  MOND_RAINBOW: { name: 'MOND_RAINBOW', thName: 'ม่อนรุ้ง', emo: '🌈', keywords: ['MOND_RAINBOW', 'MOND RAINBOW', 'ม่อนรุ้ง', 'ม่อนเรนโบว์'] },\n  OS_WATERMELON: { name: 'OS_WATERMELON', thName: 'OSแตงโม', emo: '🍉', keywords: ['OS_WATERMELON', 'OS WATERMELON', 'OS แตงโม', 'OSแตงโม', 'แตงโม'] },\n  OS_STRAWBERRY: { name: 'OS_STRAWBERRY', thName: 'OSสตอเบอร์รี่', emo: '🍓', keywords: ['OS_STRAWBERRY', 'OS STRAWBERRY', 'OSสตอเบอร์รี่', 'OS สตอเบอร์รี่'] },\n  OS_BLUEBERRY: { name: 'OS_BLUEBERRY', thName: 'OSบลูเบอร์รี่', emo: '🍇', keywords: ['OS_BLUEBERRY', 'OS BLUEBERRY', 'OS บลูเบอร์รี่', 'OS บูล', 'OSบูล', 'OS องุ่น', 'ORIS_BLUEBERRY', 'ORIS BLUEBERRY'] },\n  OS_MANGO: { name: 'OS_MANGO', thName: 'OSมะม่วง', emo: '🥭', keywords: ['OS_MANGO', 'OS MANGO', 'OS มะม่วง'] },\n  VESS_CRUSH_MINT_X_MANGO: { name: 'VESS_CRUSH_MINT.X.MANGO', thName: 'เวสครัชมิ้นท์เอ็กซ์มะม่วง', emo: '🥭', keywords: ['VESS_CRUSH_MINT.X.MANGO', 'VESS CRUSH MINT X MANGO', 'Vess Crush Mint X Mango', 'เวสครัชมิ้นท์มะม่วง'] },\n  VESS_APPLE: { name: 'VESS_APPLE', thName: 'เวสแอปเปิ้ล', emo: '🍏', keywords: ['VESS_APPLE', 'VESS APPLE', 'เวสแอปเปิ้ล', 'แอปเปิ้ล'] },\n  CAVALLO_GREEN: { name: 'CAVALLO_GREEN', thName: 'คาวาโร่เขียว', emo: '🟩', keywords: ['CAVALLO_GREEN', 'CAVALLO GREEN', 'คาวาโร่เขียว', 'คาโร่เขียว'] },\n  CAVALLO_WATERMELON: { name: 'CAVALLO_WATERMELON', thName: 'แตงโม', emo: '🍉', keywords: ['CAVALLO_WATERMELON', 'CAVALLO WATERMELON', 'CAVALLO_แตงโม', 'คาวาโร่แตงโม'] },\n  CAVALLO_MANGO: { name: 'CAVALLO_MANGO', thName: 'คาวาโร่มะม่วง', emo: '🥭', keywords: ['CAVALLO_MANGO', 'CAVALLO MANGO', 'คาวาโร่มะม่วง'] },\n  CAVALLO_TWIN_X_BALL: { name: 'CAVALLO_TWIN_X_BALL', thName: 'คาวาโล่ม่วง', emo: '🟣', keywords: ['CAVALLO_TWIN_X_BALL', 'CAVALLO TWIN X BALL', 'CAVALLO_TWIN', 'คาวาโร่ม่วง', 'คาวาโล่ม่วง', 'คาวาโล่มวง', 'คาม่วง'] },\n  MILANO_PURPLE: { name: 'MILANO_PURPLE', thName: 'มิลาโน่ม่วง', emo: '🟣', keywords: ['MILANO_PURPLE', 'MILANO PURPLE', 'มิลาโน่ม่วง', 'มิราโน่ม่วง'] },\n};\n\nconst PRICE_MASTER = {\n  VESS_MINT_COOL: 350, VESS_MINT_MENTHOL: 350, GOLD_MOUNT_GREEN_WHITE: 300, MILANO_MENTHOL: 250, MOND_GREEN: 240,\n  PLATINUM_GREEN: 250, SEVIOS_GREEN: 220, SMS_GREEN: 250, TEXAS_GREEN: 350, VESS_GREEN: 260, VESS_GREEN_SLIMS: 230,\n  VESS_MINT: 250, VOXX_GREEN: 300, TEXAS_BLUE: 350, VESS_GREEN_BLACK: 250, SIERRA_GREEN: 220, OS_BLUEBERRY: 350,\n  VESS_CRUSH_MINT_X_MANGO: 350, 'VESS_CRUSH_MINT.X.MANGO': 350, OS_MANGO: 350, OS_STRAWBERRY: 350, OS_WATERMELON: 350, CAVALLO_GREEN: 250,\n  CAVALLO_RED: 250, CAVALLO_WATERMELON: 350, CAVALLO_MANGO: 350, MOND_RAINBOW: 450, SEVIOS_RED: 220,\n  SIERRA_RED: 220, MILANO_PURPLE: 350, MOND_GOLD: 230, VESS_APPLE: 350, CAVALLO_TWIN_X_BALL: 350,\n};\n\n// ⫘⫘⫘ ล้าง alias / ทำ norm ⫘⫘⫘\nfunction cleanAlias(raw) {\n  if (!raw) return \"\";\n  return raw\n    .toString()\n    .replace(/\\|+/g, \" \")              // ล้าง |||||||||\n    .replace(/_{2,}/g, \" \")            // ล้าง ________\n    .replace(/`+/g, \"\")                // ล้าง ` ` `\n    .replace(/<code>|<\\/code>/gi, \"\")\n    .replace(/^[^\\wก-๙]+/g, \"\")        // ตัด emoji หน้า \"🍉CAVALLO\"\n    .replace(/\\s{2,}/g, \" \")\n    .trim();\n}\n\nfunction toNorm(raw) {\n  if (!raw) return \"\";\n  // ทำตัวเล็ก + ล้างซ้ำอีกชั้น = alias_norm ไว้ค้นหา\n  return cleanAlias(raw).toLowerCase().trim();\n}\nlet ALL_PRODUCT_KEYWORDS=[];\nfor(let skuKey in PRODUCT_MASTER){ for(let kw of PRODUCT_MASTER[skuKey].keywords){ ALL_PRODUCT_KEYWORDS.push({skuKey, keyword:String(kw).toUpperCase().trim()}); } }\nALL_PRODUCT_KEYWORDS.sort((a,b)=>b.keyword.length-a.keyword.length);\n\nfunction extractMessages(obj, pageIdFromParent = \"\") {\n  let messages = [];\n  if (Array.isArray(obj)) {\n    obj.forEach(item => { messages = messages.concat(extractMessages(item, pageIdFromParent)); });\n  } else if (typeof obj === 'object' && obj !== null) {\n    if (obj.message && obj.id) { \n      let cleanedMsg = obj.message.replace(/udfe[0-9a-fA-F]{0,4}/gi, \"\").replace(/\\\\?ud[0-9a-fA-F]+/gi, \"\");\n      messages.push({ ...obj, message: cleanedMsg, page_id_inherited: pageIdFromParent }); \n    }\n    let currentPageId = pageIdFromParent;\n    if (obj.participants?.data) {\n      const pageP = obj.participants.data.find(p => p.id?.length > 10);\n      if (pageP) currentPageId = pageP.id;\n    }\n    for (const key in obj) { messages = messages.concat(extractMessages(obj[key], currentPageId)); }\n  }\n  return messages;\n}\n\nfor (const item of items) {\n  const convs = item.json.data || [];\n  for (const conv of convs) {\n    const allMessages = extractMessages(conv);\n    for (const m of allMessages) {\n      if (!m.message || seen.has(m.id)) continue;\n      seen.add(m.id);\n\n      const currentPageId = m.from?.id || m.page_id_inherited || m.page_id || \"\";\n      const masterConfigNode = MASTERCONFIG.find(p => p.page_id === currentPageId);\n      if (!masterConfigNode || masterConfigNode.system_status !== \"ON\") continue;\n\n      const realPageName = masterConfigNode.page_name;\n      const page_id = masterConfigNode.page_id;\n      const assignedAgent = masterConfigNode.assigned_agent;  \n      const admin_name = masterConfigNode.admin_name;    \n      \n      let SNIPER_X_TEXT = m.message || \"\";        \n      SNIPER_X_TEXT = SNIPER_X_TEXT.replace(/\\\\n/g, '\\n').replace(/\\\\\\s*n/gi, '\\n');\n\n      if (!/cod/i.test(SNIPER_X_TEXT)) continue;\n\n      let fbCustomerName = \"\"; \n      let realTargetId = \"\"; \n      let threadId = conv?.id || \"\"; \n      if (conv?.participants?.data) {\n        const custPart = conv.participants.data.find(p => p.id !== page_id);\n        if (custPart) { fbCustomerName = custPart.name || \"\"; realTargetId = custPart.id || \"\"; }\n      }\n\n      const codMatch = SNIPER_X_TEXT.match(/(?:COD|ยอดรวมCOD|ยอดเงิน|ยอด)\\s*[:：]?\\s*(?:\\s*\\[\\s*([0-9,]+)\\s*\\]|\\s*([0-9,]+))/i);\n      const rawCodValue = codMatch ? (codMatch[1] || codMatch[2]) : \"0\";\n      const hascodAmount = parseInt(rawCodValue.replace(/,/g, '')) || 0;\n      if (hascodAmount < 200) continue;\n\n      let customer_name = \"ไม่ระบุชื่อ\";\n      const nameMatch = SNIPER_X_TEXT.match(/(?:👤\\s*ชื่อ|ชื่อ)\\s*[:：]?\\s*([ก-๙a-zA-Z\\.\\s]+?)(?=\\s*📱|\\s*📍|\\s*📮|$)/i);\n      if (nameMatch && nameMatch[1]) {\n          customer_name = nameMatch[1].replace(/^(?:คุณ|นาย|นาง|นางสาว|น\\.ส\\.|K\\.)\\s*/i, \"\").trim();\n      } else {\n          const lines = SNIPER_X_TEXT.split(\"\\n\").map(l => l.trim()).filter(Boolean);\n          for (let l of lines) {\n              if (/^(?:คุณ|นาย|นาง|นางสาว|น\\.ส\\.|K\\.)/.test(l)) {\n                  customer_name = l.replace(/^(?:คุณ|นาย|นาง|นางสาว|น\\.ส\\.|K\\.)\\s*/i, \"\").replace(/[📱📍📮].*$/, \"\").trim();\n                  break;\n              }\n          }\n      }\n      if ((!customer_name || customer_name === \"ไม่ระบุชื่อ\") && fbCustomerName) {\n          customer_name = fbCustomerName.replace(/^(?:คุณ|นาย|นาง|นางสาว|น\\.ส\\.|K\\.)\\s*/i, \"\").trim();\n      }\n\n      // 🎯 1. สกัดเบอร์โทรศัพท์ 10 หลัก (Zero-Inference Phone Engine)\n      let validatedPhone = \"\";\n      const phoneMatch = SNIPER_X_TEXT.match(/0[689][0-9\\s-]{8,13}\\d/);\n      if (phoneMatch) {\n        let cleanP = phoneMatch[0].replace(/[^0-9]/g, \"\");\n        if (cleanP.length === 10) validatedPhone = cleanP;\n      } \n      if (!validatedPhone) {\n        const generalPhoneMatch = SNIPER_X_TEXT.match(/(?:📱|เบอร์)?\\s*[:：]?\\s*(0[0-9\\s-]{8,15})/);\n        if (generalPhoneMatch) {\n            let cleanP = generalPhoneMatch[1].replace(/[^0-9]/g, \"\");\n            if (cleanP.length === 10 && cleanP.startsWith(\"0\")) validatedPhone = cleanP;\n        }\n      }\n      if (!validatedPhone) continue;\n\n      // 🎯 2. สกัดรหัสไปรษณีย์\n      let hasshipping_zipcode = \"\";\n      const zipMatch = SNIPER_X_TEXT.match(/(?:รหัสไปรษณีย์|ไปรษณีย์|ZIP)?\\s*[:：]?\\s*\\b([1-9][0-9]{4})\\b/i);\n      if (zipMatch) {\n          hasshipping_zipcode = zipMatch[1];\n      } else {\n          const allZips = SNIPER_X_TEXT.match(/\\b([1-9][0-9]{4})\\b/g);\n          if (allZips) {\n              for (let z of allZips) { if (!validatedPhone.includes(z)) { hasshipping_zipcode = z; break; } }\n          }\n      }\n\n      let finalAddressClean = \"\";\n      const addrMatch = SNIPER_X_TEXT.match(/(?:📍\\s*ที่อยู่|ที่อยู่)\\s*[:：]?\\s*([^\\r\\n]+)/i);\n      if (addrMatch && addrMatch[1]) {\n          finalAddressClean = addrMatch[1].replace(/┌[─]*┐|└[─]*┘/g, \"\").replace(/📮.*$/, \"\").trim();\n      } else {\n          const lines = SNIPER_X_TEXT.split(\"\\n\").map(l => l.trim()).filter(Boolean);\n          for (let l of lines) {\n              if (/\\d+[\\/\\d]*\\s+(?:ซอย|ถนน|ม\\.|หมู่|ต\\.|อ\\.|จ\\.|แขวง|เขต)/i.test(l)) {\n                  finalAddressClean = l.replace(/┌[─]*┐|└[─]*┘/g, \"\").trim();\n                  break;\n              }\n          }\n      }\n      if (!finalAddressClean) finalAddressClean = SNIPER_X_TEXT;\n\n      // =================================================================\n      // ✂️ SURGICAL ADDRESS CLEANER V.70 (RESCUE FIXED - ZERO-ERROR)\n      // =================================================================\n      let rawAddressBody = finalAddressClean\n        .replace(/```/g, \"\").replace(/`+/g, \"\")\n        .replace(/[━─═\\-_~]{2,}/g, \"\")\n   .replace(/🤖.*?(สรุป|รายการ).*?💰/gi,\"\")\n   .replace(/\\[สรุปรายการ.*?\\]/gi,\"\")\n   .replace(/⏰.*?(น\\.|น\\b)/gi,\"\")\n   .replace(/💰.*?(บาท|฿)?/gi,\"\")\n   .replace(/```/g,\"\")\n   .replace(/\\s{2,}/g,\" \")\n        .replace(/\\b(COD|ยอดรวม|สรุปรายการ|รายการสินค้า).*$/gms, \"\")\n        .replace(/\\b0[0-9]{8,9}\\b/g, \"\")\n        .replace(/เลขไปรษณีย์|รหัสไปรษณีย์|ไปรษณีย์/g, \"\")\n        .trim();\n\n      if (customer_name && customer_name.length > 2) {\n        rawAddressBody = rawAddressBody.replace(new RegExp(customer_name, \"gi\"), \"\").trim();\n      }\n\n      // 🎯 3. สกัด ตำบล/แขวง , อำเภอ/เขต , จังหวัด (Surgical Precision)\n      let hassubDistrict = \"\";\n      const subDistMatch = rawAddressBody.match(/(?:แขวง|ต\\s*\\.\\s*|ตำบล)\\s*([ก-๙a-zA-Z]+)/);\n      if (subDistMatch) {\n          hassubDistrict = subDistMatch[1];\n      } else {\n          // Fallback: สแกนหาคำว่า ต. หรือ ตำบล\n          let altSub = SNIPER_X_TEXT.match(/(?:ต\\.|ตำบล)\\s*([ก-๙]+)/);\n          if (altSub) hassubDistrict = altSub[1];\n      }\n\n      let hasdistrict = \"\";\n      const distMatch = rawAddressBody.match(/(?:เขต|อ\\s*\\.\\s*|อำเภอ)\\s*([ก-๙a-zA-Z]+)/);\n      if (distMatch) {\n          hasdistrict = distMatch[1];\n      } else {\n          let altDist = SNIPER_X_TEXT.match(/(?:อ\\.|อำเภอ)\\s*([ก-๙]+)/);\n          if (altDist) hasdistrict = altDist[1];\n      }\n\n      let hasgetProvince = \"\";\n      if (/กทม|กรุงเทพ/i.test(rawAddressBody)) {\n          hasgetProvince = \"กรุงเทพมหานคร\";\n      } else {\n          const provMatch = rawAddressBody.match(/(?:จ\\s*\\.\\s*|จังหวัด)\\s*([ก-๙a-zA-Z]+)/);\n          if (provMatch) {\n              hasgetProvince = provMatch[1];\n          } else {\n              let altProv = SNIPER_X_TEXT.match(/(?:จ\\.|จังหวัด)\\s*([ก-๙]+)/);\n              if (altProv) hasgetProvince = altProv[1];\n          }\n      }\n\n      let shortAddressClean = rawAddressBody\n        .replace(/(?:แขวง|ต\\s*\\.\\s*|ตำบล)\\s*[ก-ฮa-zA-Z0-9\\.\\/]+/g, \"\")\n        .replace(/(?:เขต|อ\\s*\\.\\s*|อำเภอ)\\s*[ก-ฮa-zA-Z0-9\\.\\/]+/g, \"\")\n        .replace(/(?:จ\\s*\\.\\s*|จังหวัด)\\s*[ก-ฮa-zA-Z0-9\\.\\/]+/g, \"\")\n        .replace(/กรุงเทพมหานคร|กรุงเทพฯ|กรุงเทพ|กทม/g, \"\")\n        .replace(/\\b[1-9][0-9]{4}\\b/g, \"\")\n        .replace(/\\s+/g, \" \")\n        .trim();\n\n      let pureCleanAddress = shortAddressClean;\n      if (hassubDistrict && !pureCleanAddress.includes(hassubDistrict)) {\n          pureCleanAddress += ` ต.${hassubDistrict}`;\n      }\n      if (hasdistrict && !pureCleanAddress.includes(hasdistrict)) {\n          pureCleanAddress += ` อ.${hasdistrict}`;\n      }\n      if (hasgetProvince && !pureCleanAddress.includes(hasgetProvince)) {\n          pureCleanAddress += ` จ.${hasgetProvince}`;\n      }\n      if (hasshipping_zipcode && !pureCleanAddress.includes(hasshipping_zipcode)) {\n          pureCleanAddress += ` ${hasshipping_zipcode}`;\n      }\n\n      let addrWords = pureCleanAddress.split(/\\s+/);\n      let uniqueAddrWords = addrWords.filter((word, index) => addrWords.indexOf(word) === index);\n      pureCleanAddress = uniqueAddrWords.join(\" \").trim();\n\n      // ============================================================\n      // 🎯 PERFECT PURE-TEXT ECHO ENGINE\n      // ============================================================\n      let skuList = [];\n      let thNamesList = [];\n      let codeBlockLines = [];\n      let rawFrontLines = [];\n      let totalQty = 0;\n\n      const rawLines = SNIPER_X_TEXT.split('\\n').map(l => l.trim()).filter(Boolean);\n\n      for (const line of rawLines) {\n          const lineUpper = line.toUpperCase();\n\n          if (lineUpper.includes(\"COD\") || lineUpper.includes(\"ยอด\") || lineUpper.includes(\"ชื่อ\") || lineUpper.includes(\"ที่อยู่\") || lineUpper.includes(\"โทร\") || lineUpper.includes(\"สถานะ\") || lineUpper.includes(\"เวลา\")) {\n              continue;\n          }\n\n          // Hard-stop generic product names before keyword-first matching.\n          // Never let a generic name select the first SKU in PRODUCT_MASTER.\n          const genericProductName = String(line).toLowerCase().normalize('NFC')\n            .replace(/\\s+/g, '').replace(/(\\d+(?:\\.\\d+)?)(?:คอต|ชิ้น|กล่อง|ซอง|x)?$/iu, '');\n          if (new Set(['แตงโม', 'มะม่วง', 'เขียว', 'แดง']).has(genericProductName)) {\n              rawFrontLines.push('⚠️ ตรวจชื่อสินค้า: ' + line);\n              continue;\n          }\n\n          let matchedKey = null;\n          for (let kwObj of ALL_PRODUCT_KEYWORDS) {\n              if (lineUpper.includes(kwObj.keyword)) {\n                  matchedKey = kwObj.skuKey;\n                  break;\n              }\n          }\n\n          if (matchedKey) {\n              const p = PRODUCT_MASTER[matchedKey];\n\n              let qty = 1;\n              const qtyMatch = line.match(/(\\d+)\\s*(?:คอต|ชิ้น|กล่อง|ซอง|x|\\b)/i);\n              if (qtyMatch) {\n                  let parsed = parseInt(qtyMatch[1], 10);\n                  if (parsed > 0 && parsed < 100) qty = parsed;\n              }\n\n              if (!skuList.includes(p.name)) {\n                  skuList.push(p.name);\n                  thNamesList.push(p.thName);\n                  \n                  let basePacker = p.display_for_packer || `${p.emo} ${p.name}(${p.thName})`;\n                  let purePackerText = basePacker\n                      .replace(/<code>/g, '')\n                      .replace(/<\\/code>/g, '')\n                      .replace(/`/g, '')\n                      .trim();\n                  \n                  codeBlockLines.push(`${purePackerText} ${qty} คอต`);\n                  \n                  let cleanVisualLine = line\n                      .replace(/^[^\\w\\u0E00-\\u0E7F🍉🥭🟩🟥🟨🍎⬛🌈🟣]+/, '')\n                      .replace(/<code>/g, '')\n                      .replace(/<\\/code>/g, '')\n                      .replace(/`/g, '')\n                      .trim();\n                      \n                  rawFrontLines.push(`${cleanVisualLine}`);\n                  totalQty += qty;\n              }\n          }\n      }\n\n// 👑 DYNAMIC EMOJI MAPPER\n  const finalEmoji = (skuList.length > 0 && PRODUCT_MASTER[skuList[0]])\n     ? PRODUCT_MASTER[skuList[0]].emo\n      : \"📦\";\n\n  // 🔒 LOCK คู่ - เอามาไว้ตรงนี้ก่อน output\n  const finalSku = skuList[0] || \"UNKNOWN\";\n  const masterPrice = PRICE_MASTER[finalSku] || 240;\n  let finalQty = totalQty || Math.round(hascodAmount / masterPrice) || 1;\n  let finalCod = hascodAmount;\n  if (Math.abs(finalCod - (finalQty * masterPrice)) > 50) {\n    finalCod = finalQty * masterPrice; // 4 คอต = 960 เสมอ\n  }\n\n  // สร้าง display ใหม่จาก finalQty ที่ล็อคแล้ว\n  const finalDisplay = codeBlockLines.length > 0? codeBlockLines.join(\" + \") : \"เช๊คใหม่\";\n  const finalDisplayLocked = finalDisplay.replace(/\\d+\\s*คอต/g, `${finalQty} คอต`);\n  const finalThName = thNamesList.length > 0? thNamesList.join(\", \") : \"DATA_MISSING\";\n  const finalAliasDisplay = rawFrontLines.length > 0? rawFrontLines.join(\" + \") : finalDisplayLocked;\n      \n      const realCreatedTime = m.created_time ? new Date(m.created_time) : new Date();\n      const realOrderTimeStr = realCreatedTime.toLocaleTimeString('th-TH', {\n        timeZone: 'Asia/Bangkok',\n        hour: '2-digit',\n        minute: '2-digit',\n        second: '2-digit',\n        hour12: false\n      });\n\n      output.push({\n        json: {\n        upsert_key: `${m.id || threadId || \"\"}_${cleanAlias(fbCustomerName || \"\").slice(0,20)}`.replace(/\\s+/g,\"\"),\nfacebook_name: (fbCustomerName || '').trim(),\n          threadId : threadId || \"\",\n          time_th : `⏰${realOrderTimeStr}`,\n          order_date: `📅 ${dateTagStrinG || \"\"}`,\n          order_time: new Date(m.created_time).toLocaleString(\"th-TH\",{timeZone:\"Asia/Bangkok\"}),\n        \n   \n          page_name: realPageName,\n          order_number: (() => {\n              const d = new Date(m.created_time);\n              const thDate = new Date(d.getTime() + (7 * 60 * 60 * 1000));\n              const day = String(thDate.getUTCDate()).padStart(2, '0');\n              const month = String(thDate.getUTCMonth() + 1).padStart(2, '0');\n              const year = String(thDate.getUTCFullYear()).slice(-2);\n              const timeStr = thDate.toTimeString().split(' ')[0].replace(/:/g, '');\n              return `ORD-${day}${month}${year}-${timeStr}`;\n          })(),\n          cod_amount: hascodAmount,\n          customer_name: customer_name,\n          phone: validatedPhone,\n          extracted_phone: validatedPhone,\n          \n          // 🎯 ที่อยู่และตำบล/อำเภอ/จังหวัด\n          address_display_packer: pureCleanAddress,\n          addressclean: pureCleanAddress,\n          short_address: shortAddressClean,\n          district: hassubDistrict || \"DATA_MISSING\",\n          amphoe: hasdistrict || \"DATA_MISSING\",\n          province: hasgetProvince || \"DATA_MISSING\",\n          zipcode: hasshipping_zipcode,\n          \n display_for_packer: finalAliasDisplay,\n      alias: cleanAlias(finalAliasDisplay),\n      alias_norm: toNorm(finalAliasDisplay),\nth_name: finalThName,\nsku: finalSku,\nquantity: finalQty,\nqty: finalQty,\nextracted_qty: finalQty,\nemoji: finalEmoji,\nextracted_emoji: finalEmoji,\nunit_price: masterPrice,\nexpected_cod: finalQty * masterPrice,\nlock_status: `✅ PASS ล็อคคู่ ${masterPrice}/คอต ${finalQty}คอต=${finalCod}`,\n          \n          order_status: \"\",\n          page_id: page_id,\n          recipient_id: realTargetId || \"\",\n          thread_id: threadId || \"\",\n          day_of_week: masterNode.day_of_week || \"DATA_MISSING\",\n          created_at: finalOrderTime,\n          updated_at: finalOrderTime,\n          admin_name: admin_name,  \n          assigned_hashtag: assignedAgent,\n          sniper_x_text_clean: SNIPER_X_TEXT,\n          clean_text: SNIPER_X_TEXT,\n          single_cleaned_block: SNIPER_X_TEXT.replace(/[\\r\\n]+/g, \" \").trim(),\n   message_id: m.id || \"\"\n        }\n      });\n    }\n  }\n}\nreturn output;"
+      },
+      "id": "a9d78671-d735-4dfe-9f5f-5256abec3a17",
+      "name": "🍁🎱ORDERMYSTORY",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        656,
+        800
+      ],
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1ccp8VbwcEe6eJ7ZM9istUgH397pepyv-HBC2mIEiGl8",
+          "mode": "list",
+          "cachedResultName": "หัวตาราง",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ccp8VbwcEe6eJ7ZM9istUgH397pepyv-HBC2mIEiGl8/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1331323773,
+          "mode": "list",
+          "cachedResultName": "ชีต6",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ccp8VbwcEe6eJ7ZM9istUgH397pepyv-HBC2mIEiGl8/edit#gid=1331323773"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [
+            "upsert_key"
+          ],
+          "schema": [
+            {
+              "id": "short_address",
+              "displayName": "short_address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "single_cleaned_block",
+              "displayName": "single_cleaned_block",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "sniper_x_text_clean",
+              "displayName": "sniper_x_text_clean",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "_debug_raw",
+              "displayName": "_debug_raw",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "upsert_key",
+              "displayName": "upsert_key",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "order_number",
+              "displayName": "order_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "order_time",
+              "displayName": "order_time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "order_date",
+              "displayName": "order_date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "page_name",
+              "displayName": "page_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "facebook_name",
+              "displayName": "facebook_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "customer_name",
+              "displayName": "customer_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "phone",
+              "displayName": "phone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "phone_clean",
+              "displayName": "phone_clean",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "cod_amount",
+              "displayName": "cod_amount",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "address_display_packer",
+              "displayName": "address_display_packer",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "addressclean",
+              "displayName": "addressclean",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "parsed_location_only",
+              "displayName": "parsed_location_only",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "district",
+              "displayName": "district",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "amphoe",
+              "displayName": "amphoe",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "province",
+              "displayName": "province",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "zipcode",
+              "displayName": "zipcode",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "sku",
+              "displayName": "sku",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "th_name",
+              "displayName": "th_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "alias",
+              "displayName": "alias",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "display_for_packer",
+              "displayName": "display_for_packer",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "final_display_for_packer",
+              "displayName": "final_display_for_packer",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "qty",
+              "displayName": "qty",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "clean_text",
+              "displayName": "clean_text",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "quarantine_status",
+              "displayName": "quarantine_status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "warning_tag",
+              "displayName": "warning_tag",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "repair_notes",
+              "displayName": "repair_notes",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "is_processed",
+              "displayName": "is_processed",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "threadId",
+              "displayName": "threadId",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "time_th",
+              "displayName": "time_th",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "extracted_phone",
+              "displayName": "extracted_phone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "alias_norm",
+              "displayName": "alias_norm",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "quantity",
+              "displayName": "quantity",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "extracted_qty",
+              "displayName": "extracted_qty",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "emoji",
+              "displayName": "emoji",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "extracted_emoji",
+              "displayName": "extracted_emoji",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "unit_price",
+              "displayName": "unit_price",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "expected_cod",
+              "displayName": "expected_cod",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "lock_status",
+              "displayName": "lock_status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "order_status",
+              "displayName": "order_status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "page_id",
+              "displayName": "page_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "recipient_id",
+              "displayName": "recipient_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "thread_id",
+              "displayName": "thread_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "day_of_week",
+              "displayName": "day_of_week",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "created_at",
+              "displayName": "created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "updated_at",
+              "displayName": "updated_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "assigned_hashtag",
+              "displayName": "assigned_hashtag",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "message_id",
+              "displayName": "message_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "extracted_product_block",
+              "displayName": "extracted_product_block",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "singto_empires_pkey",
+              "displayName": "singto_empires_pkey",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "parser_mode",
+              "displayName": "parser_mode",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "parsedLocationOnly",
+              "displayName": "parsedLocationOnly",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "parsed_quantity",
+              "displayName": "parsed_quantity",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "product_name",
+              "displayName": "product_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "parsed_product_raw",
+              "displayName": "parsed_product_raw",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "aliases",
+              "displayName": "aliases",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "audit_status",
+              "displayName": "audit_status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "audit_flags",
+              "displayName": "audit_flags",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "audit_badge",
+              "displayName": "audit_badge",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "is_ready_to_pack",
+              "displayName": "is_ready_to_pack",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "cod",
+              "displayName": "cod",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "productRaw",
+              "displayName": "productRaw",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "customerName",
+              "displayName": "customerName",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "addressClean",
+              "displayName": "addressClean",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "raw_cod_amount",
+              "displayName": "raw_cod_amount",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "cod_check_status",
+              "displayName": "cod_check_status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "address_line_1",
+              "displayName": "address_line_1",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "address_line_2",
+              "displayName": "address_line_2",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "full_address",
+              "displayName": "full_address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "telegram_message",
+              "displayName": "telegram_message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "telegram_copy_text",
+              "displayName": "telegram_copy_text",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "telegram_body",
+              "displayName": "telegram_body",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "telegram_final_mapped",
+              "displayName": "telegram_final_mapped",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "assigned_agent",
+              "displayName": "assigned_agent",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "products",
+              "displayName": "products",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "product_count",
+              "displayName": "product_count",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "total_expected_cod",
+              "displayName": "total_expected_cod",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "alert_code",
+              "displayName": "alert_code",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "alert_severity",
+              "displayName": "alert_severity",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "alert_priority",
+              "displayName": "alert_priority",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "alert_reason",
+              "displayName": "alert_reason",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "telegram_text",
+              "displayName": "telegram_text",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "event_key",
+              "displayName": "event_key",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2224,
+        704
+      ],
+      "id": "18265da8-1b34-4672-8ebc-273448912a72",
+      "name": "จานเกิ้ล",
+      "credentials": {
+        "googleApi": {
+          "id": "QmiqvfkCS8V7FvIv",
+          "name": "Google Service Account account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://gibyloawclbmeqlsjmld.supabase.co/rest/v1/bb_order_items_fix?on_conflict=upsert_key",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "on_conflict",
+              "value": "upsert_key"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdpYnlsb2F3Y2xibWVxbHNqbWxkIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4ODI2MTc4NywiZXhwIjoyMTAzODM3Nzg3fQ.vB7BCY5PeRmM04NwcYTJIUrvP4FcmcKfY_LEfqwsN-s"
+            },
+            {
+              "name": "Prefer",
+              "value": "resolution=merge-duplicates,return=representation"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{\n{\n  \"upsert_key\": $json.upsert_key ?? null,\n  \"order_number\": $json.order_number ?? null,\n  \"order_date\": $json.order_date ?? null,\n  \"order_time\": $json.order_time ?? null,\n  \"time_th\": $json.time_th ?? null,\n  \"day_of_week\": $json.day_of_week ?? null,\n  \"page_name\": $json.page_name ?? null,\n  \"page_id\": $json.page_id ?? null,\n  \"facebook_name\": $json.facebook_name ?? null,\n  \"customer_name\": $json.customer_name ?? null,\n  \"recipient_id\": $json.recipient_id ?? null,\n  \"threadId\": $json.threadId ?? null,\n  \"thread_id\": $json.thread_id ?? null,\n  \"message_id\": $json.message_id ?? null,\n\n  \"phone\": $json.phone ?? $json.extracted_phone ?? null,\n  \"extracted_phone\": $json.extracted_phone ?? $json.phone ?? null,\n  \"phone_clean\": $json.extracted_phone ?? $json.extracted_phone ?? $json.phone ?? null,\n  \"cod_amount\": $json.cod_amount == null ? null : Number($json.cod_amount),\n  \"raw_cod_amount\": $json.raw_cod_amount == null ? null : Number($json.raw_cod_amount),\n  \"expected_cod\": $json.expected_cod == null ? null : Number($json.expected_cod),\n  \"unit_price\": $json.unit_price == null ? null : Number($json.unit_price),\n  \"cod_check_status\": $json.cod_check_status ?? null,\n  \"lock_status\": $json.lock_status ?? null,\n\n  \"alias\": $json.alias ?? null,\n  \"alias_norm\": $json.alias_norm ?? null,\n  \"alias_text\": $json.alias_text ?? null,\n  \"aliases\": $json.aliases ?? null,\n  \"sku\": $json.sku ?? null,\n  \"product_name\": $json.product_name ?? null,\n  \"th_name\": $json.th_name ?? null,\n  \"brand\": $json.brand ?? null,\n  \"parsed_product_raw\": $json.parsed_product_raw ?? null,\n  \"extracted_product_block\": $json.extracted_product_block ?? null,\n  \"display_for_packer\": $json.display_for_packer ?? null,\n  \"final_display_for_packer\": $json.final_display_for_packer ?? null,\n  \"telegram_final_mapped\": $json.final_display_for_packer ?? $json.telegram_final_mapped ?? null,\n  \"display_label\": $json.display_label ?? null,\n\n  \"quantity\": $json.quantity == null ? null : Number($json.quantity),\n  \"qty\": $json.qty == null ? null : Number($json.qty),\n  \"extracted_qty\": $json.extracted_qty == null ? null : Number($json.extracted_qty),\n  \"parsed_quantity\": $json.parsed_quantity == null ? null : Number($json.parsed_quantity),\n\n  \"emoji\": $json.emoji ?? null,\n  \"extracted_emoji\": $json.extracted_emoji ?? null,\n  \"emoji_master\": $json.emoji_master ?? null,\n\n  \"addressclean\": $json.addressclean == null ? null : String($json.addressclean).slice(0, 5000),\n  \"parsedLocationOnly\": $json.parsedLocationOnly == null ? null : String($json.parsedLocationOnly).slice(0, 5000),\n  \"address_display_packer\": $json.address_display_packer == null ? null : String($json.address_display_packer).slice(0, 5000),\n  \"short_address\": $json.short_address == null ? null : String($json.short_address).slice(0, 5000),\n  \"address_line_1\": $json.address_line_1 == null ? null : String($json.address_line_1).slice(0, 5000),\n  \"address_line_2\": $json.address_line_2 == null ? null : String($json.address_line_2).slice(0, 5000),\n  \"full_address\": $json.full_address ?? $json.addressclean ?? $json.address_display_packer ?? null,\n  \"district\": $json.district ?? null,\n  \"amphoe\": $json.amphoe ?? null,\n  \"province\": $json.province ?? null,\n  \"zipcode\": $json.zipcode ?? null,\n\n  \"sniper_x_text_clean\": $json.sniper_x_text_clean ?? null,\n  \"clean_text\": $json.clean_text ?? null,\n  \"single_cleaned_block\": $json.single_cleaned_block ?? null,\n  \"debug_block\": $json.debug_block ?? null,\n  \"debug_prod\": $json.debug_prod ?? null,\n  \"warning_tag\": $json.warning_tag ?? null,\n  \"repair_log\": $json.repair_log ?? null,\n\n  \"audit_status\": $json.audit_status ?? null,\n  \"audit_flags\": $json.audit_flags ?? null,\n  \"audit_badge\": $json.audit_badge ?? null,\n  \"parser_mode\": $json.parser_mode ?? null,\n  \"is_ready_to_pack\": $json.is_ready_to_pack ?? false,\n  \"order_status\": $json.order_status ?? null,\n  \"sen_status\": $json.sen_status ?? \"ยังไม่ส่ง\",\n  \"telegram_status\": $json.telegram_status ?? \"PENDING\",\n  \"line_status\": $json.line_status ?? \"PENDING\",\n  \"messenger_status\": $json.messenger_status ?? \"PENDING\",\n  \"stock_status\": $json.stock_status ?? null,\n  \"is_out_of_stock\": $json.is_out_of_stock ?? false,\n\n  \"telegram_message\": $json.telegram_message ?? null,\n  \"telegram_copy_text\": $json.telegram_copy_text ?? null,\n  \"packer_copy_text\": $json.packer_copy_text ?? null,\n  \"telegram_chat_id\": $json.telegram_chat_id ?? null,\n  \"telegram_body\": $json.telegram_body ?? {},\n  \"detected_products\": $json.detected_products ?? [],\n\n  \"assigned_hashtag\": $json.assigned_hashtag ?? null,\n  \"singto_empires_pkey\": $json.singto_empires_pkey ?? null,\n  \"updated_at\": new Date().toISOString()\n}\n}}",
+        "options": {}
+      },
+      "id": "ab4f8685-2e67-435d-8b17-16b418ade88c",
+      "name": "👑 bb_orders",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        2000,
+        704
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "TNTFGMoEnjQ5puen",
+          "name": "👽คำวิบัติ(ซบ)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// ============================================================\n// 🦁 SINGTO ENGINE V22.8 - ADVANCED EMBEDDED NAME & PHONE EXTRACTOR\n// ============================================================\nconst PRODUCT_MASTER = {\n  // --- สายเย็น ---\n  \"SEVIOS_GREEN\": { name: \"SEVIOS_GREEN\", thName: \"ซีวอสเขียว\", emo: \"🟩\", keywords: [\"SEVIOS_GREEN\", \"ซีวอสเขียว\", \"ชีวอสเขียว\", \"SEVIOS GREEN\"] },\n  \"ROYAL_GREEN_MENTHOL\": { name: \"ROYAL_GREEN_MENTHOL\", thName: \"รอยัลเขียว\", emo: \"🟩\", keywords: [\"ROYAL_GREEN_MENTHOL\", \"ROYAL_GREEN\", \"รอยัลเขียว\", \"ROYAL ASCOT KS MENTHOL\"] },\n  \"MILANO_GREEN\": { name: \"MILANO_GREEN\", thName: \"มิลาโน่เขียว\", emo: \"🟩\", keywords: [\"MILANO_GREEN\", \"มิลาโน่เขียว\", \"มิราโน่เมนทอล\", \"มิลาโน่เมลทอล\", \"มิลาโน่เมลทอล1\"] },\n  \"VESS_GREEN_SLIMS\": { name: \"VESS_GREEN_SLIMS\", thName: \"เวสเขียวเล็ก\", emo: \"🟩\", keywords: [\"VESS_GREEN_SLIMS\", \"เวสเขียวเล็ก\", \"VESS_GREEN\"] },\n  \"VOXX_GREEN\": { name: \"VOXX_GREEN\", thName: \"วอคเขียว\", emo: \"🟩\", keywords: [\"VOXX_GREEN\", \"วอคเขียว\"] },\n  \"MOND_GREEN\": { name: \"MOND_GREEN\", thName: \"ม่อนเขียว\", emo: \"🟩\", keywords: [\"MOND_GREEN\", \"ม่อนเขียว\", \"ม่อนเขีย\", \"ม่อนเย็น\", \"ม่อน เขียว\", \"ม่อนเขีย ว\", \"ม่อนเขียวปี้ปี้\"] },\n  \"CAVALLO_GREEN\": { name: \"CAVALLO_GREEN\", thName: \"คาวาโร่เขียว\", emo: \"🟩\", keywords: [\"CAVALLO_GREEN\", \"คาวาโร่เขียว\", \"คาโร่เขียว\"] },\n  \"VESS_GREEN_BLACK\": { name: \"VESS_GREEN_BLACK\", thName: \"เวสเขียวดำ\", emo: \"🟩\", keywords: [\"VESS_GREEN_BLACK\", \"เวสเขียวดำ\", \"เวสกรีนแบล๊ค\", \"เวสเขียว-ดำ\", \"เวสเขียว ดำ\"] },\n\n  // --- สายร้อน ---\n  \"SEVIOS_RED\": { name: \"SEVIOS_RED\", thName: \"ซีวอสแดง\", emo: \"🟥\", keywords: [\"SEVIOS_RED\", \"ซีวอสแดง\", \"ชีวอสแดง\", \"SEVIOS RED\", \"ชิโตะ\", \"ชิโตะ(ซีวอสแดง)\"] },\n  \"ROYAL_RED\": { name: \"ROYAL_RED\", thName: \"รอยัลแดง\", emo: \"🟥\", keywords: [\"ROYAL_RED\", \"รอยัลแดง\", \"ROYAL ASCOT RED\"] },\n  \"CAVALLO_RED\": { name: \"CAVALLO_RED\", thName: \"คาวาโร่แดง\", emo: \"🟥\", keywords: [\"CAVALLO_RED\", \"คาวาโร่แดง\", \"CAVALO_RED\", \"คาวาไร่แดงแดงจังจัง\"] },\n  \"SIERRA_RED\": { name: \"SIERRA_RED\", thName: \"เซียร่าแดง\", emo: \"🟥\", keywords: [\"SIERRA_RED\", \"เซียร่าแดง\"] },\n  \"MILANO_KINGS\": { name: \"MILANO_KINGS\", thName: \"มิลาโน่คิงส์\", emo: \"🟥\", keywords: [\"MILANO_KINGS\", \"มิลาโน่คิง\",\"มิราโน่เเดง 1\", \"MILANO KINGS\", \"มิราโน่เเดงเทา 1\", \"MILANO KINGS\", \"มิลาโน่แดง\"] },\n  \"VESS_RED\": { name: \"VESS_RED\", thName: \"เวสแดง\", emo: \"🟥\", keywords: [\"VESS_RED\", \"เวสแดง\", \"เวสแดง1\", \"เวส แดง\"] },\n  \"MOND_GOLD\": { name: \"MOND_GOLD\", thName: \"ม่อนทอง\", emo: \"🟨\", keywords: [\"MOND_GOLD\", \"ม่อนทอง\", \"ม่อนร้อน\", \"MOND GOLD\"] },\n  \"VESS_GOLD\": { name: \"VESS_GOLD\", thName: \"เวสทอง\", emo: \"🟨\", keywords: [\"VESS_GOLD\", \"เวสทอง\", \"เวสโกล\"] },\n  \"JHON_BLACK\": { name: \"JHON_BLACK\", thName: \"จอนอ่อน\", emo: \"⬛\", keywords: [\"JHON_BLACK\", \"จอนอ่อน\"] },\n  \"SIERRA_GREEN\": { name: \"SIERRA_GREEN\", thName: \"เซียร่าเขียว\", emo: \"🟩\", keywords: [\"SIERRA_GREEN\", \"เซียร่าเขียว\"] },\n\n  // --- ผลไม้ / เม็ดบีบ ---\n  \"SEVIOS_WATERMELON\": { name: \"SEVIOS_WATERMELON\", thName: \"ซีวอสแตงโม\", emo: \"🍉\", keywords: [\"SEVIOS_WATERMELON\", \"ซีวอสแตงโม\", \"ซีวอส แตงโม\", \"SEVIOS WATERMELON\"] },\n  \"CAVALLO_WATERMELON\": { name: \"CAVALLO_WATERMELON\", thName: \"คาวาโล่แตงโม\", emo: \"🍉\", keywords: [\"CAVALLO_WATERMELON\", \"คาวาโร่แตงโม\", \"คาโร่แตงโม\", \"CAVALLOแตงโม\", \"CAVALLO แดงโม\", \"คาวาโร่ แดงโม\"] },\n  \"MOND_RAINBOW\": { name: \"MOND_RAINBOW\", thName: \"ม่อนรุ้ง\", emo: \"🌈\", keywords: [\"ม่อนรุ้ง\", \"ม่อนเรนโบว์\"] },\n  \"OS_WATERMELON\": { name: \"OS_WATERMELON\", thName: \"OSแตงโม\", emo: \"🍉\", keywords: [\"OS_WATERMELON\", \"OS แตงโม\", \"OSแตงโม\"] },\n  \"OS_STRAWBERRY\": { name: \"OS_STRAWBERRY\", thName: \"OSสตอเบอร์รี่\", emo: \"🍓\", keywords: [\"OS_STRAWBERRY\", \"OSสตอเบอร์รี่\", \"OS สตอเบอร์รี่\"] },\n  \"OS_BLUEBERRY\": { name: \"OS_BLUEBERRY\", thName: \"OSบลูเบอร์รี่\", emo: \"🍇\", keywords: [\"OS_BLUEBERRY\", \"OS บลูเบอร์รี่\", \"OS องุ่น\", \"ORIS_BLUEBERRY\", \"ORIS BLUEBERRY\"] },\n  \"OS_MANGO\": { name: \"OS_MANGO\", thName: \"OSมะม่วง\", emo: \"🥭\", keywords: [\"OS_MANGO\", \"OS มะม่วง\"] },\n  \"VESS_APPLE\": { name: \"VESS_APPLE\", thName: \"เวสแอปเปิ้ล\", emo: \"🍏\", keywords: [\"VESS_APPLE\", \"เวสแอปเปิ้ล\", \"เวสแอปเปิ้ล1\", \"แอปเปิ้ล\", \"Vess แอปเปิ้ล\"] },\n  \"Vess Crush Mint X Grape\": { name: \"VESS_G\", thName: \"เวสองุ่นใหญ่\", emo: \"🍇\", keywords: [\"Vess Crush Mint X Grape\", \"เวสองุ่น\", \"เวสองุ่น1\", \"องุ่น\", \"OS องุ่น\", \"VESS_GRAPE_2CAPS\", \"2CAPS\"] },\n  \"CAVALLO_TWIN_X_BALL\": { name: \"CAVALLO_TWIN_X_BALL\", thName: \"คาวาโล่ม่วง\", emo: \"🟣\", keywords: [\"CAVALLO_TWIN_X_BALL\", \"คาวาโร่ม่วง\", \"คาวาโล่ม่วง\", \"CAVALLO_TWIN\"] }\n};\n\nconst SMART_BRANDS = {\n  \"SEVIOS\": [\"SEVIOS\", \"ซีวอส\", \"ชีวอส\", \"ชิโตะ\"],\n  \"ROYAL\": [\"ROYAL\", \"รอยัล\"],\n  \"MILANO\": [\"MILANO\", \"มิลาโน่\"],\n  \"VESS\": [\"VESS\", \"เวส\"],\n  \"VOXX\": [\"VOXX\", \"วอค\", \"ว็อก\"],\n  \"MOND\": [\"MOND\", \"ม่อน\"],\n  \"CAVALLO\": [\"CAVALLO\", \"คาวาโร่\", \"คาวาโล่\", \"คาโร่\", \"CAVALO\"],\n  \"SIERRA\": [\"SIERRA\", \"เซียร่า\"],\n  \"JHON\": [\"JHON\", \"จอน\"],\n  \"OS\": [\"OS\"]\n};\n\nconst SMART_COLORS = {\n  \"GREEN\": [\"GREEN\", \"เขียว\", \"MENTHOL\", \"🟩\", \"🟢\"],\n  \"RED\": [\"RED\", \"แดง\", \"🟥\", \"🔴\"],\n  \"GOLD\": [\"GOLD\", \"ทอง\", \"โกล\", \"🟨\", \"🟡\"],\n  \"BLACK\": [\"BLACK\", \"ดำ\", \"อ่อน\", \"⬛\", \"🖤\"],\n  \"WATERMELON\": [\"WATERMELON\", \"แตงโม\", \"แดงโม\", \"🍉\"],\n  \"BLUEBERRY\": [\"BLUEBERRY\", \"บลูเบอร์รี่\", \"องุ่น\", \"🍇\"],\n  \"MANGO\": [\"MANGO\", \"มะม่วง\", \"🥭\"],\n  \"RAINBOW\": [\"MOND_RAINBOW\", \"ม่อนรุ้ง\", \"🌈\"],\n  \"TWIN_X_BALL\": [\"TWIN\", \"ม่วง\", \"🟣\", \"X_BALL\"]\n};\n\nconst SMART_SKU_MAPPER = {\n  \"ROYAL_GREEN\": \"ROYAL_GREEN_MENTHOL\",\n  \"VESS_GREEN\": \"VESS_GREEN_SLIMS\",\n  \"CAVALLO_TWIN_X_BALL\": \"CAVALLO_TWIN_X_BALL\",\n  \"CAVALLO_PURPLE\": \"CAVALLO_TWIN_X_BALL\",\n  \"CAVALLO_TWIN\": \"CAVALLO_TWIN_X_BALL\",\n  \"CAVALLO_WATERMELON\": \"CAVALLO_WATERMELON\",\n  \"SIERRA_GREEN\": \"SIERRA_GREEN\"\n};\n\nfunction trySmartMatching(lineUpper) {\n    let matchedBrand = null;\n    let matchedColor = null;\n\n    for (let [bKey, keywords] of Object.entries(SMART_BRANDS)) {\n        if (keywords.some(kw => lineUpper.includes(kw))) {\n            matchedBrand = bKey;\n            break;\n        }\n    }\n\n    for (let [cKey, keywords] of Object.entries(SMART_COLORS)) {\n        if (keywords.some(kw => lineUpper.includes(kw))) {\n            matchedColor = cKey;\n            break;\n        }\n    }\n\n    if (matchedBrand && matchedColor) {\n        let rawKey = `${matchedBrand}_${matchedColor}`;\n        return SMART_SKU_MAPPER[rawKey] || rawKey;\n    }\n    return null;\n}\n\nlet result = [];\nlet items = $input.all();\nlet allItems = Array.isArray(items) ? items : [];\n\nlet zipcodeDb = {};\nfor (let item of allItems) {\n    let j = item.json || item;\n    if (j.zipcode && j.district && j.amphoe && j.province) {\n        let zKey = String(j.zipcode).trim();\n        if (!zipcodeDb[zKey]) zipcodeDb[zKey] = [];\n        zipcodeDb[zKey].push({\n            district: String(j.district).trim(),\n            amphoe: String(j.amphoe).trim(),\n            province: String(j.province).trim()\n        });\n    }\n}\n\nlet orderItems = allItems.filter(item => {\n    let j = item.json || item;\n    return j.sniper_x_text_clean || j.clean_text || j.sniper_x_text_full || j.address_only || j.facebook_name;\n});\n\nfor (let item of orderItems) {\n    let j = item.json || item;\n    let rawText = String(j.sniper_x_text_clean || j.clean_text || j.sniper_x_text_full || j.fullAddressBlock || j.address_only || \"\").trim();\n\n    let isolatedCod = Number(j.cod_amount || j.expected_cod || 0);\n    if (isolatedCod === 0) {\n        let codMatch = rawText.match(/(?:COD|ยอด COD|ยอดเงิน)\\s*[:：]?\\s*\\[?(\\d+)\\]?/i);\n        if (codMatch) isolatedCod = parseInt(codMatch[1], 10);\n    }\n\n    let hasPendingTags = rawText.includes(\"รอเบอร์โทร\") || rawText.includes(\"รอที่อยู่\");\n    if ((rawText === \"\" || rawText.includes(\"[DROP_THIS_ROW]\")) && !hasPendingTags) {\n        continue; \n    }\n\n    let rawPhone = String(j.phone || j.telephone || \"\").replace(/[^0-9]/g, '');\n    let phoneMatch = rawText.match(/\\b(0[0-9]{1,2}[-\\s]?[0-9]{3}[-\\s]?[0-9]{4})\\b/);\n    if (!rawPhone && phoneMatch) {\n        rawPhone = phoneMatch[1].replace(/[^0-9]/g, '');\n    }\n    let isolatedPhone = rawPhone ? rawPhone : \"DATA_MISSING\";\n    let phoneNum = rawPhone.replace(/^0/, ''); \n\n    let rawFbName = String(j.facebook_name || j.customer_name || \"\").toLowerCase();\n    let fbName = rawFbName.replace(/[^\\u0e00-\\u0e7f\\u0061-\\u007a\\u0030-\\u0039]/g, '').trim();\n    if (!fbName) fbName = \"unknown\";\n\n    j.singto_empires_pkey = `${fbName}_${phoneNum}`.toLowerCase();\n\n    let lines = rawText.split('\\n')\n        .map(l => l.trim())\n        .filter(l => l.length > 0)\n        .filter(l => !l.match(/^[-=—]{3,}$/));\n\n    let isolatedZipcode = \"DATA_MISS\";\n    let zipMatch = rawText.match(/\\b([1-9][0-9]{4})\\b/g);\n    if (zipMatch) {\n        isolatedZipcode = zipMatch[zipMatch.length - 1];\n    }\n\n    let rawAddressOnly = \"\";\n    let addrMatch = rawText.match(/(?:📍\\s*ที่อยู่|ที่อยู่จัดส่ง|ที่อยู่)\\s*[:.-]\\s*([^\\n]+)/i);\n    if (addrMatch) {\n        rawAddressOnly = addrMatch[1].trim();\n    } else {\n        let addrLines = rawText.split(\"\\n\");\n        let collectedLines = [];\n        for (let line of addrLines) {\n            let tLine = line.trim();\n            if (tLine.length < 3 || tLine.toLowerCase().includes('cod') || tLine.match(/^[0-9]{10}$/)) continue;\n            let isAddress = tLine.includes(\"วัด\") || tLine.includes(\"ตึก\") || tLine.includes(\"อาคาร\") || tLine.includes(\"หมู่บ้าน\") || tLine.includes(\"บ้าน\") ||\n                tLine.includes(\"โรงเรียน\") || tLine.includes(\"โรงแรม\") || tLine.includes(\"สถานี\") || tLine.includes(\"ตลาด\") ||\n                (/\\d+[\\/]?\\d*/.test(tLine) && (tLine.includes(\"ถนน\") || tLine.includes(\"ซอย\") || tLine.includes(\"หมู่\") || tLine.includes(\"ตำบล\") || tLine.includes(\"อำเภอ\") || tLine.includes(\"จังหวัด\") || tLine.includes(\"ต.\") || tLine.includes(\"อ.\") || tLine.includes(\"จ.\") || tLine.includes(\"แขวง\") || tLine.includes(\"เขต\") || tLine.includes(\"ค่าย\") || tLine.includes(\"กทม\")));\n            \n            if (isAddress && !collectedLines.includes(tLine)) collectedLines.push(tLine);\n        }\n        rawAddressOnly = collectedLines.join(\" \");\n    }\n\n    // --- SMART EXTRACTION FOR EMBEDDED NAME/PHONE IN ADDRESS ---\n    let isolatedName = \"\";\n    let directNameMatch = rawText.match(/(?:ชื่อ:|👤ชื่อ:)\\s*([^\\n📱📍📮]+)/i);\n    if (directNameMatch && directNameMatch[1]) {\n        isolatedName = directNameMatch[1].replace(/[✅❎⭐🥰|]/g, '').trim();\n    }\n\n    // Handle embedded name & leading numbers inside rawAddressOnly (e.g. \"200เสกสรร ชาญสำโรง บ้านเลขที่...\")\n    if (rawAddressOnly) {\n        // Strip leading phone if attached\n        let leadPhoneMatch = rawAddressOnly.match(/^(\\d{9,10})\\s+(.*)/);\n        if (leadPhoneMatch) {\n            if (isolatedPhone === \"DATA_MISSING\") isolatedPhone = leadPhoneMatch[1];\n            rawAddressOnly = leadPhoneMatch[2];\n        }\n\n        // Strip leading number + name (e.g. \"200เสกสรร ชาญสำโรง 111/6...\")\n        let leadNumNameMatch = rawAddressOnly.match(/^(\\d+)?\\s*([\\u0e00-\\u0e7fa-zA-Z\\.\\s]{2,35})\\s+(?:บ้านเลขที่|เลขที่|\\d+\\/|ม\\.|ซอย|ถนน|ชุมชน)/i);\n        if (leadNumNameMatch) {\n            if (!isolatedCod && leadNumNameMatch[1] && parseInt(leadNumNameMatch[1]) > 99) {\n                isolatedCod = parseInt(leadNumNameMatch[1], 10);\n            }\n            if (!isolatedName || isolatedName === \"ไม่ระบุชื่อ\") {\n                isolatedName = leadNumNameMatch[2].trim();\n            }\n            rawAddressOnly = rawAddressOnly.replace(leadNumNameMatch[0], '').trim();\n        }\n    }\n\n    if (!isolatedName || isolatedName.length <= 1 || isolatedName.length > 35 || isolatedName.includes(\"ขอบคุณ\") || isolatedName.includes(\"แอดไลน์\")) {\n        isolatedName = String(j.customer_name || j.facebook_name || \"ไม่ระบุชื่อ\").trim();\n    }\n\n    let parsedDistrict = \"\";\n    let parsedAmphoe = \"\";\n    let parsedProvince = \"\";\n\n    let distMatch = rawText.match(/(?:ตำบล|ต\\.|แขวง)\\s*([^\\s,]+?)(?=\\s*(?:อำเภอ|อ\\.|เขต|จังหวัด|จ\\.|[0-9]|$))/i);\n    let amphMatch = rawText.match(/(?:อำเภอ|อ\\.|เขต)\\s*([^\\s,]+?)(?=\\s*(?:จังหวัด|จ\\.|[0-9]|$))/i);\n    let provMatch = rawText.match(/(?:จังหวัด|จ\\.)\\s*([^\\s,0-9]+)/i);\n\n    if (distMatch) parsedDistrict = distMatch[1].replace(/^(ตำบล|ต\\.|แขวง)/, '').trim();\n    if (amphMatch) parsedAmphoe = amphMatch[1].replace(/^(อำเภอ|อ\\.|เขต)/, '').trim();\n    if (provMatch) parsedProvince = provMatch[1].replace(/^(จังหวัด|จ\\.)/, '').trim();\n\n    if (!parsedProvince || !parsedAmphoe) {\n        let cleanForTokens = rawText.replace(isolatedZipcode, '').replace(/[^\\u0e00-\\u0e7fa-zA-Z0-9\\s]/g, ' ').trim();\n        let tokens = cleanForTokens.split(/\\s+/).filter(t => t.length > 0);\n        if (tokens.length >= 3) {\n            if (!parsedProvince) parsedProvince = tokens[tokens.length - 1];\n            if (!parsedAmphoe) parsedAmphoe = tokens[tokens.length - 2];\n            if (!parsedDistrict) parsedDistrict = tokens[tokens.length - 3];\n        }\n    }\n\n    if ((!parsedProvince || !parsedAmphoe) && isolatedZipcode !== \"DATA_MISS\" && zipcodeDb[isolatedZipcode]) {\n        let matchLoc = zipcodeDb[isolatedZipcode][0];\n        if (!parsedDistrict) parsedDistrict = matchLoc.district;\n        if (!parsedAmphoe) parsedAmphoe = matchLoc.amphoe;\n        if (!parsedProvince) parsedProvince = matchLoc.province;\n    }\n\n    let cleanAddressBase = rawAddressOnly\n        .replace(/.*?(?:เลขที่ออเดอร์|เวลาสั่งซื้อ|เบอร์โทรศัพท์|เบอร์|📍\\s*ที่อยู่|ที่อยู่จัดส่ง|ที่อยู่)\\s*[:.-]\\s*/gi, '')\n        .replace(/(?:COD|ยอดเงิน|ยอดรวมCOD|คอด)\\s*[:\\s]*\\d+/gi, '')\n        .replace(new RegExp(`\\\\b${isolatedZipcode}\\\\b`, 'g'), '')\n        .replace(/[\\ud83c-\\udbff][\\udc00-\\udfff]|[\\u{1F000}-\\u{1F9FF}]/gu, ' ')\n        .replace(/[■□ ━〰🔸▫️🔺▼🔺▼.◦⊱✿✧･ﾟ🚚*▭▬🔺▼]+$/g, '')\n        .replace(/\\s+/g, ' ')\n        .trim();\n\n    let parsedAddressShort = cleanAddressBase.replace(/(?:ตำบล|ต\\.|แขวง|อำเภอ|อ\\.|เขต|จังหวัด|จ\\.).*/ui, '').replace(/^[📍:\\s\\-\\–\\—\\•\\·]+/g, '').trim();\n    if (!parsedAddressShort) parsedAddressShort = cleanAddressBase;\n\n    let parsedLocationOnly = `${parsedAddressShort} ${parsedDistrict} ${parsedAmphoe} ${parsedProvince} ${isolatedZipcode}`.trim();\n    if (!parsedProvince && (rawText.includes(\"กทม\") || rawText.includes(\"กรุงเทพ\"))) parsedProvince = \"กรุงเทพมหานคร\";\n\n    let skuMap = {};\n\n    for (let lineStr of lines) {\n        let upperStr = lineStr.toUpperCase();\n        let cleanLineStr = upperStr.replace(/[\\(\\)\\[\\]\\{\\}]/g, ' '); \n        let matchedKey = null;\n\n        if (upperStr.includes(\"เจ้าค่ะ\") || upperStr.includes(\"นายท่าน\") || upperStr.includes(\"มิล่า\") || upperStr.includes(\"HTTPS://\")) continue;\n\n        for (let skuKey in PRODUCT_MASTER) {\n            let keywords = PRODUCT_MASTER[skuKey].keywords;\n            if (keywords.some(kw => upperStr.includes(String(kw).toUpperCase().trim()) || cleanLineStr.includes(String(kw).toUpperCase().trim()))) {\n                matchedKey = skuKey;\n                break;\n            }\n        }\n\n        if (!matchedKey) {\n            let smartCandidate = trySmartMatching(cleanLineStr);\n            if (smartCandidate && PRODUCT_MASTER[smartCandidate]) matchedKey = smartCandidate;\n        }\n\n        let lineQty = 1;\n        let qtyMatch = lineStr.match(/(?:จำนวน|\\*|x|X)\\s*(\\d+)/i) || \n                       lineStr.match(/(\\d+)\\s*(?:คอต|กล่อง|ซอง|คอตตอน|ชุด)/i) || \n                       lineStr.match(/\\s+(\\d+)\\s*$/);\n        if (qtyMatch) {\n            let parsed = parseInt(qtyMatch[1], 10);\n            if (parsed > 0 && parsed < 100) lineQty = parsed;\n        }\n\n        if (matchedKey) {\n            skuMap[matchedKey] = (skuMap[matchedKey] || 0) + lineQty;\n        }\n    }\n\n    let parsedKeys = Object.keys(skuMap);\n    let isUnmatched = (parsedKeys.length === 0);\n    let auditStatus = isUnmatched ? \"NEEDS_REMAP\" : \"READY\";\n    let auditFlags = [];\n\n    if (isUnmatched) auditFlags.push(\"❌ สินค้าไม่ตรง SKU (ต้องรีแมฟ)\");\n    if (isolatedCod <= 0) auditFlags.push(\"⚠️ ยอด COD เป็น 0 หรือไม่พบข้อมูล\");\n    if (isolatedZipcode === \"DATA_MISS\") auditFlags.push(\"⚠️ ไม่พบรหัสไปรษณีย์\");\n\n    let badgeText = auditStatus === \"READY\" ? \"🟢 พร้อมแพ็ก\" : \"🔴 รอตรวจสอบ/รีแมฟ\";\n\n    if (isUnmatched) {\n        result.push({\n            json: {\n                ...j,\n                singto_empires_pkey: j.singto_empires_pkey,\n                parser_mode: \"singto_freeform_clean\",\n                cod_amount: isolatedCod,\n                customer_name: isolatedName,\n                phone: isolatedPhone,\n                addressclean: parsedAddressShort,\n                parsedLocationOnly: parsedLocationOnly,\n                district: parsedDistrict,\n                amphoe: parsedAmphoe,\n                province: parsedProvince,\n                zipcode: isolatedZipcode,\n                parsed_quantity: 1,\n                sku: \"UNMATCHED\",\n                product_name: \"ไม่สามารถระบุสินค้า\",\n                th_name: \"ไม่สามารถระบุสินค้า\",\n                parsed_product_raw: \"ไม่สามารถระบุสินค้า | จำนวน 1 คอต\",\n                display_for_packer: \"📦 ไม่สามารถระบุสินค้า | จำนวน 1 คอต\",\n                audit_status: auditStatus,\n                audit_flags: auditFlags.join(\" | \"),\n                audit_badge: badgeText,\n                is_ready_to_pack: false,\n                updated_at: new Date().toISOString()\n            }\n        });\n    } else {\n        let combinedSkuList = [];\n        let combinedDisplayList = [];\n        let primarySku = parsedKeys[0];\n        let primaryProj = PRODUCT_MASTER[primarySku] || { name: primarySku, thName: primarySku, emo: \"📦\" };\n        let totalQuantity = 0;\n\n        for (let skuKey of parsedKeys) {\n            let qty = skuMap[skuKey];\n            let proj = PRODUCT_MASTER[skuKey] || { name: skuKey, thName: skuKey, emo: \"📦\" };\n            totalQuantity += qty;\n            combinedSkuList.push(skuKey);\n            combinedDisplayList.push(`${proj.emo || \"📦\"} ${proj.name}(${proj.thName}) ${qty} คอต`);\n        }\n\n        result.push({\n            json: {\n                ...j,\n                singto_empires_pkey: j.singto_empires_pkey,\n                parser_mode: \"singto_explicit_template\",\n                cod_amount: isolatedCod,\n                customer_name: isolatedName,\n                phone: isolatedPhone,\n                addressclean: parsedAddressShort,\n                parsedLocationOnly: parsedLocationOnly,\n                district: parsedDistrict,\n                amphoe: parsedAmphoe,\n                province: parsedProvince,\n                zipcode: isolatedZipcode,\n                sku: primarySku,\n                product_name: primaryProj.name,\n                th_name: primaryProj.thName,\n                parsed_quantity: totalQuantity,\n                parsed_product_raw: combinedSkuList.join(\", \"),\n                display_for_packer: combinedDisplayList.join(\" + \"),\n                aliases: combinedSkuList.join(\", \"),\n                audit_status: auditStatus,\n                audit_flags: auditFlags.length > 0 ? auditFlags.join(\" | \") : \"✅ ข้อมูลสมบูรณ์\",\n                audit_badge: badgeText,\n                is_ready_to_pack: true,\n                updated_at: new Date().toISOString()\n            }\n        });\n    }\n}\n\nreturn result;"
+      },
+      "id": "86da894c-6c18-4d26-aad6-8442cfacec51",
+      "name": "👳‍♂️จาร์ยGOOGLE1",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1776,
+        800
+      ],
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "jsCode": "// ======================================================= //\n// 📥 THE GATEKEEPER: AUTO + ปั๊มขาวกันตาย + ปั๊มอีโมจิ (ฉบับเสถียร 100%) //\n// ======================================================= //\nconst items = $input.all();\nconst result = [];\n\n// 📅 1. ตั้งต้นฐานเวลาเครื่องไทยปัจจุบันที่แม่นยำที่สุด ป้องกันเอ๋อช่วงเที่ยงคืน\nconst now = new Date();\nconst bkkString = now.toLocaleString(\"en-US\", {timeZone: \"Asia/Bangkok\"});\nconst nowBKK = new Date(bkkString);\n\nconst todayD = nowBKK.getDate();\nconst todayM = nowBKK.getMonth();\nconst todayY = nowBKK.getFullYear();\n\nconst dayNames = [\"Sunday\",\"Monday\",\"Tuesday\",\"Wednesday\",\"Thursday\",\"Friday\",\"Saturday\"];\nconst autoDayName = dayNames[nowBKK.getDay()];\n\nconst colorMap = {\n  \"Sunday\":    { color: \"🔴 Red\", emoji: \"🌹\" },\n  \"Monday\":    { color: \"🟡 Yellow\", emoji: \"🌻\" },\n  \"Tuesday\":   { color: \"🌸 Pink\", emoji: \"🎀\" },\n  \"Wednesday\": { color: \"🟢 Green\", emoji: \"🌿\" },\n  \"Thursday\":  { color: \"🟠 Orange\", emoji: \"🍊\" },\n  \"Friday\":    { color: \"🔵 Blue\", emoji: \"💎\" },\n  \"Saturday\":  { color: \"🟣 Purple\", emoji: \"🍇\" }\n};\n\n// 🧬 2. ฟังก์ชันตรวจสอบปฏิทินจริงร้อยปี แกะฟอร์แมต ค.ศ./พ.ศ. ได้หมดจด\nfunction parseOrderDate(raw) {\n  if (!raw) return null;\n  raw = String(raw).trim();\n  try {\n    // รองรับฟอร์แมตเครื่องหมายสแลช / (เช่น 21/7/2569)\n    if (raw.includes('/')) {\n      const datePart = raw.split(' ')[0];\n      const [d, m, y] = datePart.split('/');\n      const baseY = Number(y) > 2500 ? Number(y) - 543 : Number(y);\n      return new Date(baseY, Number(m) - 1, Number(d));\n    }\n    // รองรับฟอร์แมตเครื่องหมายขีด - (เช่น 2026-07-21)\n    if (raw.includes('-')) {\n      const datePart = raw.split(' ')[0];\n      const [y, m, d] = datePart.split('-');\n      const baseY = Number(y) > 2500 ? Number(y) - 543 : Number(y);\n      return new Date(baseY, Number(m) - 1, Number(d));\n    }\n    return new Date(raw);\n  } catch {\n    return null;\n  }\n}\n\nconst todaySetting = colorMap[autoDayName];\n\n// 🔄 3. วนลูปประมวลผลจบในรอบเดียว ข้อมูลไม่ตกหล่น\nfor (const item of items) {\n  const d = item.json || item;\n  const rawTime = d.order_time || d.ordered_at || d.updated_at || \"\";\n  const orderDate = parseOrderDate(rawTime);\n  \n  let isToday = false;\n  let orderDayName = autoDayName;\n\n  if (orderDate) {\n    isToday = orderDate.getDate() === todayD && orderDate.getMonth() === todayM && orderDate.getFullYear() === todayY;\n    // 🎯 ล็อกคอชื่อวันตามตัวเลขปฏิทินจริงในบิล (แก้บั๊กชื่อวันจากหน้าบ้านพ่น Tuesday ช่วงเที่ยงคืน)\n    orderDayName = dayNames[orderDate.getDay()];\n  } else {\n    isToday = true;\n  }\n\n  const settingByOrderDay = colorMap[orderDayName] || { color: \"⚪ White\", emoji: \"⚪\" };\n  const settingToday = todaySetting;\n\n  // 🛡️ ระบบการจัดการสีจัดสรรลงท่อ\n  if (isToday) {\n    d.status_color = settingToday.color;\n    d.routing_tag = settingToday.color;\n    d.status_color_backup = \"⚪ White\";\n    d.routing_tag_backup = \"⚪ White\";\n    d.is_safety_white = true;\n  } else {\n    d.status_color = settingByOrderDay.color;\n    d.routing_tag = settingByOrderDay.color;\n    d.status_color_backup = \"👻 Ghost_Black\";\n    d.routing_tag_backup = \"👻 Ghost_Black\";\n    d.is_safety_white = false;\n  }\n  \n  // พ่นค่าชื่อวันตามจริงส่งต่อไปตารางและตัวสวิตช์เราเตอร์\n  d.day_of_week = orderDayName;\n  d.order_day = orderDayName; \n\n  // 🎀 4. ปั๊มอีโมจิหน้า order_number ป้องกันบวม\n  if (d.order_number && !String(d.order_number).includes(settingByOrderDay.emoji)) {\n    let cleanOrderNo = String(d.order_number).replace(/^[^\\w]+_/, '');\n    if (cleanOrderNo.startsWith(\"ORD-\")) {\n      d.order_number = `${settingByOrderDay.emoji}_${cleanOrderNo}`;\n    } else {\n      d.order_number = `${settingByOrderDay.emoji}_${d.order_number}`;\n    }\n  }\n\n  if (d.hasOwnProperty('routing_flag')) delete d.routing_flag;\n\n//⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘\n// 🎯 5. ระบบปั๊มแฮชแท็กกันซ้ำออเดอร์ซ้อน (เวอร์ชันปลอดภัย 100%)\n//⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘\n\nconst tsParts = bkkString.split(', ')[1].split(' ')[0].split(':'); // เจาะเวลาจาก bkkString\nlet randomSuffix = Math.floor(Math.random() * 90000) + 10000;    // สุ่มเลข 5 หลักกันชนกันในเสี้ยววิ\n\n// ประกอบร่างแฮชแท็ก: วัน + เดือน + ชั่วโมง + นาที + วินาที + เลขสุ่ม\nconst t8 = String(todayD).padStart(2,'0') + \n           String(todayM).padStart(2,'0') + \n           tsParts[0].padStart(2,'0') + \n           tsParts[1].padStart(2,'0') + \n           tsParts[2].padStart(2,'0') + \"_\" + randomSuffix;\n\nd.Assigned_Hashtag = `⭐#SINGTO_ORDER_${t8}`;\n\n  result.push({ json: d });\n}\n\nreturn result;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1552,
+        800
+      ],
+      "id": "727a43b4-88b8-4aff-877b-55ffa782a7a9",
+      "name": "🌈Lucky colors by the day"
+    },
+    {
+      "parameters": {
+        "jsCode": "// OFFLINE PATCH: multi-product parser; no external calls, no credentials changed\nconst inputItems = $input.all();\nconst PRODUCT_MASTER = {\n  VESS_MINT_COOL: { name: 'VESS_MINT_COOL', thName: 'เวสมิ้นท์คูล', emo: '🟩', keywords: ['VESS_MINT_COOL', 'VESS MINT COOL', 'เวสมิ้นท์คูล', 'เวสมิ้นคูล'] },\n  VESS_MINT_MENTHOL: { name: 'VESS_MINT_MENTHOL', thName: 'เวสมิ้นท์เมนทอล', emo: '🟩', keywords: ['VESS_MINT_MENTHOL', 'VESS MINT MENTHOL', 'เวสมิ้นท์เมนทอล'] },\n  GOLD_MOUNT_GREEN_WHITE: { name: 'GOLD_MOUNT_GREEN_WHITE', thName: 'โกลด์เมาท์เขียวขาว', emo: '🟩', keywords: ['GOLD_MOUNT_GREEN_WHITE', 'GOLD MOUNT GREEN WHITE', 'โกลด์เมาท์เขียวขาว'] },\n  MILANO_MENTHOL: { name: 'MILANO_MENTHOL', thName: 'มิลาโน่เมนทอล', emo: '🟩', keywords: ['MILANO_MENTHOL', 'MILANO GREEN', 'มิลาโน่เมนทอล', 'มิลาโน่เขียว', 'มิเมนทอล'] },\n  MOND_GREEN: { name: 'MOND_GREEN', thName: 'ม่อนเขียว', emo: '🟩', keywords: ['MOND_GREEN', 'MOND GREEN', 'ม่อนเขียว', 'ม่อนเขีย', 'ม่อนเย็น', 'ม่อน เขียว', 'ม่อนเขีย ว'] },\n  PLATINUM_GREEN: { name: 'PLATINUM_GREEN', thName: 'แพลตตินั่มเขียว', emo: '🟩', keywords: ['PLATINUM_GREEN', 'PLATINUM GREEN', 'แพลตตินั่มเขียว', 'แพตตินั่มเขียว'] },\n  SEVIOS_GREEN: { name: 'SEVIOS_GREEN', thName: 'ซีวอสเขียว', emo: '🟩', keywords: ['SEVIOS_GREEN', 'SEVIOS GREEN', 'ซีวอสเขียว', 'ชีวอสเขียว'] },\n  SMS_GREEN: { name: 'SMS_GREEN', thName: 'เอสเอ็มเอสเขียว', emo: '🟩', keywords: ['SMS_GREEN', 'SMS GREEN', 'เอสเอ็มเอสเขียว'] },\n  TEXAS_GREEN: { name: 'TEXAS_GREEN', thName: 'เท็กซัสเขียว', emo: '🟩', keywords: ['TEXAS_GREEN', 'TEXAS GREEN', 'เท็กซัสเขียว'] },\n  VESS_GREEN: { name: 'VESS_GREEN', thName: 'เวสเขียว', emo: '🟩', keywords: ['VESS_GREEN', 'VESS GREEN', 'Vess เขียว', 'เวสเขียว'] },\n  VESS_GREEN_SLIMS: { name: 'VESS_GREEN_SLIMS', thName: 'เวสเขียวเล็ก', emo: '🟩', keywords: ['VESS_GREEN_SLIMS', 'VESS GREEN SLIMS', 'เวสเขียวเล็ก'] },\n  VESS_MINT: { name: 'VESS_MINT', thName: 'เวสมิ้นท์', emo: '🟩', keywords: ['VESS_MINT', 'VESS MINT', 'เวสมิ้นท์', 'เวสมิ้น'] },\n  VOXX_GREEN: { name: 'VOXX_GREEN', thName: 'วอคเขียว', emo: '🟩', keywords: ['VOXX_GREEN', 'VOXX GREEN', 'VOXX', 'Voxx เขัยว', 'Voxx เขียว', 'วอคเขียว', 'วอค เขียว', 'ว็อกเขียว'] },\n  TEXAS_BLUE: { name: 'TEXAS_BLUE', thName: 'เท็กซัสฟ้า', emo: '🟦', keywords: ['TEXAS_BLUE', 'TEXAS BLUE', 'เท็กซัสฟ้า', 'เท็กซัสน้ำเงิน'] },\n  VESS_GREEN_BLACK: { name: 'VESS_GREEN_BLACK', thName: 'เวสเขียวดำ', emo: '🟩', keywords: ['VESS_GREEN_BLACK', 'VESS GREEN BLACK', 'เวสเขียวดำ', 'เวสเขียว ดำ'] },\n  SIERRA_GREEN: { name: 'SIERRA_GREEN', thName: 'เซียร่าเขียว', emo: '🟩', keywords: ['SIERRA_GREEN', 'SIERRA GREEN', 'SIERRA เขียว', 'SIERRA เขยีว', 'เซียร่าเขียว', 'เซียร่าเขยีว', 'เซียร์ร่าเขียว'] },\n\n  SEVIOS_RED: { name: 'SEVIOS_RED', thName: 'ซีวอสแดง', emo: '🟥', keywords: ['SEVIOS_RED', 'SEVIOS RED', 'ซีวอสแดง', 'ชีวอสแดง'] },\n  ROYAL_RED: { name: 'ROYAL_RED', thName: 'รอยัลแดง', emo: '🟥', keywords: ['ROYAL_RED', 'ROYAL RED', 'รอยัลแดง'] },\n  CAVALLO_RED: { name: 'CAVALLO_RED', thName: 'คาวาโร่แดง', emo: '🟥', keywords: ['CAVALLO_RED', 'CAVALO_RED', 'คาวาโร่แดง', 'คาวาไร่แดง'] },\n  SIERRA_RED: { name: 'SIERRA_RED', thName: 'เซียร่าแดง', emo: '🟥', keywords: ['SIERRA_RED', 'SIERRA RED', 'เซียร่าแดง', 'เชียร่าแดง'] },\n  MILANO_KINGS: { name: 'MILANO_KINGS', thName: 'มิลาโน่คิงส์', emo: '🟥', keywords: ['MILANO_KINGS', 'MILANO KINGS', 'มิลาโน่คิง', 'มิราโน่แดง', 'มิลาโน่แดงเทา'] },\n  VESS_RED: { name: 'VESS_RED', thName: 'เวสแดง', emo: '🟥', keywords: ['VESS_RED', 'VESS RED', 'เวสแดง', 'เวส แดง'] },\n  MOND_GOLD: { name: 'MOND_GOLD', thName: 'ม่อนทอง', emo: '🟨', keywords: ['MOND_GOLD', 'MOND GOLD', 'ม่อนทอง', 'ม่อนร้อน'] },\n  VESS_GOLD: { name: 'VESS_GOLD', thName: 'เวสทอง', emo: '🟨', keywords: ['VESS_GOLD', 'VESS GOLD', 'เวสทอง', 'เวสโกล'] },\n  JHON_BLACK: { name: 'JHON_BLACK', thName: 'จอนอ่อน', emo: '⬛', keywords: ['JHON_BLACK', 'JHON BLACK', 'จอนอ่อน'] },\n  PLATINUM_BLACK: { name: 'PLATINUM_BLACK', thName: 'แพลตตินั่มดำ', emo: '⬛', keywords: ['PLATINUM_BLACK', 'PLATINUM BLACK', 'Platinum Black', 'PLATINUMHOTBLACK', 'แพลตตินั่มดำ', 'แพตตินั่มดำ'] },\n\n  MOND_RAINBOW: { name: 'MOND_RAINBOW', thName: 'ม่อนรุ้ง', emo: '🌈', keywords: ['MOND_RAINBOW', 'MOND RAINBOW', 'ม่อนรุ้ง', 'ม่อนเรนโบว์'] },\n  OS_WATERMELON: { name: 'OS_WATERMELON', thName: 'OSแตงโม', emo: '🍉', keywords: ['OS_WATERMELON', 'OS WATERMELON', 'OS แตงโม', 'OSแตงโม', 'แตงโม'] },\n  OS_STRAWBERRY: { name: 'OS_STRAWBERRY', thName: 'OSสตอเบอร์รี่', emo: '🍓', keywords: ['OS_STRAWBERRY', 'OS STRAWBERRY', 'OSสตอเบอร์รี่', 'OS สตอเบอร์รี่'] },\n  OS_BLUEBERRY: { name: 'OS_BLUEBERRY', thName: 'OSบลูเบอร์รี่', emo: '🍇', keywords: ['OS_BLUEBERRY', 'OS BLUEBERRY', 'OS บลูเบอร์รี่', 'OS บูล', 'OSบูล', 'OS องุ่น', 'ORIS_BLUEBERRY', 'ORIS BLUEBERRY'] },\n  OS_MANGO: { name: 'OS_MANGO', thName: 'OSมะม่วง', emo: '🥭', keywords: ['OS_MANGO', 'OS MANGO', 'OS มะม่วง'] },\n  VESS_CRUSH_MINT_X_MANGO: { name: 'VESS_CRUSH_MINT.X.MANGO', thName: 'เวสครัชมิ้นท์เอ็กซ์มะม่วง', emo: '🥭', keywords: ['VESS_CRUSH_MINT.X.MANGO', 'VESS CRUSH MINT X MANGO', 'Vess Crush Mint X Mango', 'เวสครัชมิ้นท์มะม่วง'] },\n  VESS_APPLE: { name: 'VESS_APPLE', thName: 'เวสแอปเปิ้ล', emo: '🍏', keywords: ['VESS_APPLE', 'VESS APPLE', 'เวสแอปเปิ้ล', 'แอปเปิ้ล'] },\n  CAVALLO_GREEN: { name: 'CAVALLO_GREEN', thName: 'คาวาโร่เขียว', emo: '🟩', keywords: ['CAVALLO_GREEN', 'CAVALLO GREEN', 'คาวาโร่เขียว', 'คาโร่เขียว'] },\n  CAVALLO_WATERMELON: { name: 'CAVALLO_WATERMELON', thName: 'แตงโม', emo: '🍉', keywords: ['CAVALLO_WATERMELON', 'CAVALLO WATERMELON', 'CAVALLO_แตงโม', 'คาวาโร่แตงโม'] },\n  CAVALLO_MANGO: { name: 'CAVALLO_MANGO', thName: 'คาวาโร่มะม่วง', emo: '🥭', keywords: ['CAVALLO_MANGO', 'CAVALLO MANGO', 'คาวาโร่มะม่วง'] },\n  CAVALLO_TWIN_X_BALL: { name: 'CAVALLO_TWIN_X_BALL', thName: 'คาวาโล่ม่วง', emo: '🟣', keywords: ['CAVALLO_TWIN_X_BALL', 'CAVALLO TWIN X BALL', 'CAVALLO_TWIN', 'คาวาโร่ม่วง', 'คาวาโล่ม่วง', 'คาวาโล่มวง', 'คาม่วง'] },\n  MILANO_PURPLE: { name: 'MILANO_PURPLE', thName: 'มิลาโน่ม่วง', emo: '🟣', keywords: ['MILANO_PURPLE', 'MILANO PURPLE', 'มิลาโน่ม่วง', 'มิราโน่ม่วง'] },\n};\nconst PRICE_MASTER = {\n  VESS_MINT_COOL: 350, VESS_MINT_MENTHOL: 350, GOLD_MOUNT_GREEN_WHITE: 300, MILANO_MENTHOL: 250, MOND_GREEN: 240,\n  PLATINUM_GREEN: 250, SEVIOS_GREEN: 220, SMS_GREEN: 250, TEXAS_GREEN: 350, VESS_GREEN: 260, VESS_GREEN_SLIMS: 230,\n  VESS_MINT: 250, VOXX_GREEN: 300, TEXAS_BLUE: 350, VESS_GREEN_BLACK: 250, SIERRA_GREEN: 220, OS_BLUEBERRY: 350,\n  VESS_CRUSH_MINT_X_MANGO: 350, 'VESS_CRUSH_MINT.X.MANGO': 350, OS_MANGO: 350, OS_STRAWBERRY: 350, OS_WATERMELON: 350, CAVALLO_GREEN: 250,\n  CAVALLO_RED: 250, CAVALLO_WATERMELON: 350, CAVALLO_MANGO: 350, MOND_RAINBOW: 450, SEVIOS_RED: 220,\n  SIERRA_RED: 220, MILANO_PURPLE: 350, MOND_GOLD: 230, VESS_APPLE: 350, CAVALLO_TWIN_X_BALL: 350,\n};\n\nconst EXTRA_ALIASES = {\n  'เวสเขียวเลก': 'VESS_GREEN_SLIMS',\n  'เวสเขียวเล็ก': 'VESS_GREEN_SLIMS',\n  'เซียร์ราเขียว': 'SIERRA_GREEN',\n  'ซีเอร่าเขียว': 'SIERRA_GREEN',\n  'OSบลู': 'OS_BLUEBERRY',\n  'OSบูล': 'OS_BLUEBERRY',\n  'Voxx เขัยว': 'VOXX_GREEN',\n  'วอคเขียว': 'VOXX_GREEN',\n};\n\nfunction value(row, key) {\n  const v = row?.[key];\n  return v === undefined || v === null ? '' : String(v).trim();\n}\nfunction firstExisting(row, keys) {\n  for (const key of keys) { const v = value(row, key); if (v !== '') return v; }\n  return '';\n}\nfunction norm(text) {\n  return String(text ?? '').toLowerCase().normalize('NFC')\n    .replace(/\\s+/g, '').replace(/[|()\\[\\]{}:：,，._-]/g, '');\n}\nfunction numberOrNull(raw) {\n  if (raw === null || raw === undefined || String(raw).trim() === '') return null;\n  const n = Number(String(raw).replaceAll(',', '').replace(/[^0-9.-]/g, ''));\n  return Number.isFinite(n) ? n : null;\n}\nfunction rawBlock(row) {\n  return firstExisting(row, ['sniper_x_text_clean', 'clean_text', 'single_cleaned_block', 'raw_message', 'message_text', 'order_text', 'original_message']);\n}\nfunction parseQty(chunk) {\n  let raw = String(chunk ?? '').trim();\n  let qty = null;\n  const end = raw.match(/(\\d+(?:\\.\\d+)?)\\s*(?:คอต|คอตตอน|carton|กล่อง|ชิ้น)?\\s*$/iu);\n  if (end) { qty = Number(end[1]); raw = raw.slice(0, end.index).trim(); }\n  else {\n    const start = raw.match(/^\\s*(\\d+(?:\\.\\d+)?)\\s*(?:คอต|คอตตอน|carton|กล่อง|ชิ้น)?\\s+/iu);\n    if (start) { qty = Number(start[1]); raw = raw.slice(start[0].length).trim(); }\n  }\n  return { raw, qty: Number.isFinite(qty) && qty > 0 ? qty : null };\n}\nfunction productRows() {\n  return Object.values(PRODUCT_MASTER).map((p) => ({\n    sku: p.name, th_name: p.thName, emoji: p.emo || '📦',\n    unit_price: numberOrNull(PRICE_MASTER[p.name]), keywords: p.keywords || [],\n  }));\n}\nconst PRODUCTS = productRows();\nfunction resolve(rawName) {\n  const n = norm(rawName);\n  // Hard-stop generic product names: never choose the first SKU in Master.\n  const GENERIC_AMBIGUOUS = new Set(['แตงโม', 'มะม่วง', 'เขียว', 'แดง']);\n  if (GENERIC_AMBIGUOUS.has(n)) return { product: null, reason: 'AMBIGUOUS_ALIAS' };\n  const direct = PRODUCTS.find((p) => norm(p.sku) === n);\n  if (direct) return { product: direct, reason: 'EXACT_SKU' };\n  const extraSku = Object.entries(EXTRA_ALIASES).find(([alias]) => norm(alias) === n)?.[1];\n  if (extraSku) return { product: PRODUCTS.find((p) => p.sku === extraSku) || null, reason: 'ALIAS_EXACT' };\n  const matches = [];\n  for (const p of PRODUCTS) for (const kw of p.keywords) if (norm(kw) === n) matches.push(p);\n  const unique = [...new Map(matches.map((p) => [p.sku, p])).values()];\n  if (unique.length === 1) return { product: unique[0], reason: 'ALIAS_EXACT' };\n  if (unique.length > 1) return { product: null, reason: 'AMBIGUOUS_ALIAS' };\n  return { product: null, reason: 'UNRESOLVED' };\n}\nfunction display(p) { return `${p.emoji} \\${p.sku}(\\${p.th_name})`; }\nfunction extractChunks(text) {\n  return String(text ?? '').replace(/\\r/g, '').split(/[\\n,，]+/u)\n    .map((x) => x.trim()).filter(Boolean)\n    .filter((x) => !/^(?:cod|ยอด|ชื่อ|ที่อยู่|โทร|เบอร์|📱|📍|📮|สถานะ|เวลา)/iu.test(x));\n}\nfunction parseProducts(row) {\n  const raw = rawBlock(row);\n  const chunks = extractChunks(raw);\n  const matched_products = []; const unresolved_products = [];\n  for (const chunk of chunks) {\n    const parsed = parseQty(chunk);\n    const resolved = resolve(parsed.raw);\n    if (!resolved.product) { unresolved_products.push({ raw: parsed.raw, qty: parsed.qty, reason: resolved.reason }); continue; }\n    const p = resolved.product;\n    const qty = parsed.qty ?? numberOrNull(firstExisting(row, ['extracted_qty', 'quantity', 'qty'])) ?? 1;\n    const itemExpected = p.unit_price === null ? null : p.unit_price * qty;\n    const mapped = display(p);\n    matched_products.push({\n      raw: parsed.raw, sku: p.sku, th_name: p.th_name, emoji: p.emoji,\n      quantity: qty, qty, extracted_qty: qty, unit_price: p.unit_price,\n      item_expected_cod: itemExpected, expected_cod: itemExpected,\n      display_for_packer: mapped, telegram_final_mapped: `${mapped} \\${qty} คอต`,\n      match_status: itemExpected === null ? 'PRICE_MISSING' : 'MATCHED', match_reason: resolved.reason,\n    });\n  }\n  return { matched_products, unresolved_products };\n}\nfunction rawCod(row) {\n  const direct = firstExisting(row, ['cod_amount', 'cod', 'total_cod', 'order_total']);\n  if (direct) return numberOrNull(direct);\n  const m = rawBlock(row).match(/(?:cod|ยอด(?:รวม)?cod|ยอดเงิน|เก็บเงินปลายทาง)\\s*[:=]?\\s*([\\d,]+(?:\\.\\d+)?)/iu);\n  return m ? numberOrNull(m[1]) : null;\n}\nfunction formatBaht(n) { return n === null ? '' : new Intl.NumberFormat('th-TH').format(n); }\nfunction escapeHtml(v) { return String(v ?? '').replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('\"', '&quot;'); }\n\nreturn inputItems.map((item) => {\n  const row = item.json ?? {};\n  const parsed = parseProducts(row);\n  const products = parsed.matched_products;\n  const totalQty = products.reduce((s, p) => s + p.qty, 0);\n  const allPriced = products.length > 0 && parsed.unresolved_products.length === 0 && products.every((p) => p.item_expected_cod !== null);\n  const expected = allPriced ? products.reduce((s, p) => s + p.item_expected_cod, 0) : null;\n  const codAmount = rawCod(row);\n  const codStatus = parsed.unresolved_products.length ? 'CHECK_PRODUCT' : !allPriced ? 'CHECK_PRICE' : codAmount === null ? 'CHECK_DATA' : Math.abs(codAmount - expected) < 0.001 ? 'PASS' : 'CHECK_COD';\n  const productDisplay = products.map((p) => p.telegram_final_mapped).join('\\n');\n  const displayOnly = products.map((p) => p.display_for_packer).join('\\n');\n  const status = firstExisting(row, ['status', 'order_status', 'bill_status']);\n  const message = [\n    status ? `🚀 <b>[\\${escapeHtml(status)}]</b>` : '🚀', '━━━━━━━━━━━━━━━━━━━━',\n    row.order_number ? `🆔 <code>\\${escapeHtml(row.order_number)}</code>` : '',\n    row.order_time ? `⏰ <code>\\${escapeHtml(row.order_time)}</code>` : '',\n    codAmount !== null ? `💰 <code>\\${formatBaht(codAmount)} บาท</code>` : '',\n    expected !== null ? `🔒 <code>คำนวณจากสินค้า \\${formatBaht(expected)} บาท</code>` : '',\n    '━━━━━━━━━━━━━━━━━━━━', value(row, 'customer_name'), value(row, 'phone'), value(row, 'full_address'),\n    `📦 <b>สินค้า \\${products.length} อย่าง รวม \\${totalQty} คอต</b>`, productDisplay,\n    codStatus !== 'PASS' ? `⚠️ \\${codStatus}` : '', '━━━━━━━━━━━━━━━━━━━━',\n  ].filter(Boolean).join('\\n');\n  return { json: {\n    ...row, matched_products: products, unresolved_products: parsed.unresolved_products,\n    total_product_types: products.length, total_product_qty: totalQty,\n    sku: products.map((p) => p.sku).join(','), th_name: products.map((p) => p.th_name).join(','),\n    emoji: products.map((p) => p.emoji).join(''), extracted_emoji: products.map((p) => p.emoji).join(''),\n    quantity: totalQty, qty: totalQty, extracted_qty: totalQty, unit_price: products.length === 1 ? products[0].unit_price : null,\n    cod_amount: row.cod_amount ?? codAmount, raw_cod_amount: row.cod_amount ?? codAmount, expected_cod: expected, cod_check_status: codStatus,\n    display_for_packer: displayOnly, final_display_for_packer: displayOnly, telegram_final_mapped: productDisplay,\n    telegram_message: message, telegram_copy_text: [row.order_number, row.order_time, codAmount !== null ? `${formatBaht(codAmount)} บาท` : '', row.customer_name, row.phone, row.full_address, productDisplay].filter(Boolean).join('\\n'),\n    parser_mode: 'OFFLINE_MULTI_PRODUCT_V1', is_ready_to_pack: products.length > 0 && parsed.unresolved_products.length === 0 && codStatus === 'PASS',\n  } };\n});"
+      },
+      "id": "33193ec3-2910-4cc2-88ba-a0cd52546362",
+      "name": "🟨UNIVERSAL TRANSFORMER1",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1328,
+        800
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://gibyloawclbmeqlsjmld.supabase.co/rest/v1/bb_order",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "on_conflict",
+              "value": "upsert_key"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdpYnlsb2F3Y2xibWVxbHNqbWxkIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4ODI2MTc4NywiZXhwIjoyMTAzODM3Nzg3fQ.vB7BCY5PeRmM04NwcYTJIUrvP4FcmcKfY_LEfqwsN-s"
+            },
+            {
+              "name": "Prefer",
+              "value": "resolution=merge-duplicates,return=representation"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{\n{\n  \"upsert_key\": $json.upsert_key ?? null,\n  \"order_number\": $json.order_number ?? null,\n  \"order_date\": $json.order_date ?? null,\n  \"order_time\": $json.order_time ?? null,\n  \"time_th\": $json.time_th ?? null,\n  \"day_of_week\": $json.day_of_week ?? null,\n  \"page_name\": $json.page_name ?? null,\n  \"page_id\": $json.page_id ?? null,\n  \"facebook_name\": $json.facebook_name ?? null,\n  \"customer_name\": $json.customer_name ?? null,\n  \"recipient_id\": $json.recipient_id ?? null,\n  \"threadId\": $json.threadId ?? null,\n  \"thread_id\": $json.thread_id ?? null,\n  \"message_id\": $json.message_id ?? null,\n\n  \"phone\": $json.phone ?? $json.extracted_phone ?? null,\n  \"extracted_phone\": $json.extracted_phone ?? $json.phone ?? null,\n  \"phone_clean\": $json.extracted_phone ?? $json.extracted_phone ?? $json.phone ?? null,\n  \"cod_amount\": $json.cod_amount == null ? null : Number($json.cod_amount),\n  \"raw_cod_amount\": $json.raw_cod_amount == null ? null : Number($json.raw_cod_amount),\n  \"expected_cod\": $json.expected_cod == null ? null : Number($json.expected_cod),\n  \"unit_price\": $json.unit_price == null ? null : Number($json.unit_price),\n  \"cod_check_status\": $json.cod_check_status ?? null,\n  \"lock_status\": $json.lock_status ?? null,\n\n  \"alias\": $json.alias ?? null,\n  \"alias_norm\": $json.alias_norm ?? null,\n  \"alias_text\": $json.alias_text ?? null,\n  \"aliases\": $json.aliases ?? null,\n  \"sku\": $json.sku ?? null,\n  \"product_name\": $json.product_name ?? null,\n  \"th_name\": $json.th_name ?? null,\n  \"brand\": $json.brand ?? null,\n  \"parsed_product_raw\": $json.parsed_product_raw ?? null,\n  \"extracted_product_block\": $json.extracted_product_block ?? null,\n  \"display_for_packer\": $json.display_for_packer ?? null,\n  \"final_display_for_packer\": $json.final_display_for_packer ?? null,\n  \"telegram_final_mapped\": $json.final_display_for_packer ?? $json.telegram_final_mapped ?? null,\n  \"display_label\": $json.display_label ?? null,\n\n  \"quantity\": $json.quantity == null ? null : Number($json.quantity),\n  \"qty\": $json.qty == null ? null : Number($json.qty),\n  \"extracted_qty\": $json.extracted_qty == null ? null : Number($json.extracted_qty),\n  \"parsed_quantity\": $json.parsed_quantity == null ? null : Number($json.parsed_quantity),\n\n  \"emoji\": $json.emoji ?? null,\n  \"extracted_emoji\": $json.extracted_emoji ?? null,\n  \"emoji_master\": $json.emoji_master ?? null,\n\n  \"addressclean\": $json.addressclean == null ? null : String($json.addressclean).slice(0, 5000),\n  \"parsedLocationOnly\": $json.parsedLocationOnly == null ? null : String($json.parsedLocationOnly).slice(0, 5000),\n  \"address_display_packer\": $json.address_display_packer == null ? null : String($json.address_display_packer).slice(0, 5000),\n  \"short_address\": $json.short_address == null ? null : String($json.short_address).slice(0, 5000),\n  \"address_line_1\": $json.address_line_1 == null ? null : String($json.address_line_1).slice(0, 5000),\n  \"address_line_2\": $json.address_line_2 == null ? null : String($json.address_line_2).slice(0, 5000),\n  \"full_address\": $json.full_address ?? $json.addressclean ?? $json.address_display_packer ?? null,\n  \"district\": $json.district ?? null,\n  \"amphoe\": $json.amphoe ?? null,\n  \"province\": $json.province ?? null,\n  \"zipcode\": $json.zipcode ?? null,\n\n  \"sniper_x_text_clean\": $json.sniper_x_text_clean ?? null,\n  \"clean_text\": $json.clean_text ?? null,\n  \"single_cleaned_block\": $json.single_cleaned_block ?? null,\n  \"debug_block\": $json.debug_block ?? null,\n  \"debug_prod\": $json.debug_prod ?? null,\n  \"warning_tag\": $json.warning_tag ?? null,\n  \"repair_log\": $json.repair_log ?? null,\n\n  \"audit_status\": $json.audit_status ?? null,\n  \"audit_flags\": $json.audit_flags ?? null,\n  \"audit_badge\": $json.audit_badge ?? null,\n  \"parser_mode\": $json.parser_mode ?? null,\n  \"is_ready_to_pack\": $json.is_ready_to_pack ?? false,\n  \"order_status\": $json.order_status ?? null,\n  \"sen_status\": $json.sen_status ?? \"ยังไม่ส่ง\",\n  \"telegram_status\": $json.telegram_status ?? \"PENDING\",\n  \"line_status\": $json.line_status ?? \"PENDING\",\n  \"messenger_status\": $json.messenger_status ?? \"PENDING\",\n  \"stock_status\": $json.stock_status ?? null,\n  \"is_out_of_stock\": $json.is_out_of_stock ?? false,\n\n  \"telegram_message\": $json.telegram_message ?? null,\n  \"telegram_copy_text\": $json.telegram_copy_text ?? null,\n  \"packer_copy_text\": $json.packer_copy_text ?? null,\n  \"telegram_chat_id\": $json.telegram_chat_id ?? null,\n  \"telegram_body\": $json.telegram_body ?? {},\n  \"detected_products\": $json.detected_products ?? [],\n\n  \"assigned_hashtag\": $json.assigned_hashtag ?? null,\n  \"singto_empires_pkey\": $json.singto_empires_pkey ?? null,\n  \"updated_at\": new Date().toISOString()\n}\n}}",
+        "options": {}
+      },
+      "id": "41bd669b-1ca9-4983-bd0a-1117771b088c",
+      "name": "👑 bb_orders2",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        880,
+        800
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "TNTFGMoEnjQ5puen",
+          "name": "👽คำวิบัติ(ซบ)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nconst output = [];\n\n// 📅 1. ตั้งต้นฐานเวลาเครื่องไทยปัจจุบันที่แม่นยำที่สุด ป้องกันเอ๋อช่วงเที่ยงคืน\nconst now = new Date();\nconst bkkString = now.toLocaleString(\"en-US\", { timeZone: \"Asia/Bangkok\" });\nconst nowBKK = new Date(bkkString);\n\nconst todayD = nowBKK.getDate();\nconst todayM = nowBKK.getMonth();\nconst todayY = nowBKK.getFullYear();\nconst yCe = todayY;\nconst yBe = yCe + 543;\n\n// กำหนดจุดตัดเวลา \"บ่าย 2 โมงของเมื่อวาน\" (Yesterday 14:00:00)\nconst yesterdayBKK = new Date(nowBKK);\nyesterdayBKK.setDate(nowBKK.getDate() - 1);\nyesterdayBKK.setHours(14, 0, 0, 0); // 14:00:00 ของเมื่อวาน\n\nconst dayNames = [\"Sunday\", \"Monday\", \"Tuesday\", \"Wednesday\", \"Thursday\", \"Friday\", \"Saturday\"];\nconst autoDayName = dayNames[nowBKK.getDay()];\n\nconst colorMap = {\n    \"Sunday\":    { color: \"🔴 Red\", emoji: \"🔴\", icon: \"🌹\" },\n    \"Monday\":    { color: \"🟡 Yellow\", emoji: \"🟡\", icon: \"🌻\" },\n    \"Tuesday\":   { color: \"🌸 Pink\", emoji: \"🌸\", icon: \"🎀\" },\n    \"Wednesday\": { color: \"🟢 Green\", emoji: \"🟢\", icon: \"🌿\" },\n    \"Thursday\":  { color: \"🟠 Orange\", emoji: \"🟠\", icon: \"🍊\" },\n    \"Friday\":    { color: \"🔵 Blue\", emoji: \"🔵\", icon: \"💎\" },\n    \"Saturday\":  { color: \"🟣 Purple\", emoji: \"🟣\", icon: \"🍇\" }\n};\n\n// 2. ออกแบบตารางแมตช์วันที่ \"วันนี้จริง\" (รองรับทั้ง พ.ศ., ค.ศ., และเลข 2 หลักท้าย)\nconst todayMatches = [\n    `${todayD}/${todayM + 1}/${yBe}`,\n    `${String(todayD).padStart(2, '0')}/${String(todayM + 1).padStart(2, '0')}/${yBe}`,\n    `${todayD}/${todayM + 1}/${yCe}`,\n    `${String(todayD).padStart(2, '0')}/${String(todayM + 1).padStart(2, '0')}/${yCe}`,\n    `${String(todayD).padStart(2, '0')}/${String(todayM + 1).padStart(2, '0')}/${String(yCe).slice(-2)}`,\n    `${String(todayD).padStart(2, '0')}/${String(todayM + 1).padStart(2, '0')}/${String(yBe).slice(-2)}`\n];\n\nfunction parseOrderDate(raw) {\n    if (!raw) return null;\n    raw = String(raw).trim();\n    try {\n        // รองรับรูปแบบ DD/MM/YYYY หรือ DD/MM/YY ทั้งแบบมีเวลาและไม่มีเวลา\n        if (raw.includes('/')) {\n            const datePart = raw.split(' ')[0];\n            const timePart = raw.split(' ')[1] || \"00:00:00\";\n            const [d, m, y] = datePart.split('/');\n            const baseY = Number(y) > 2500 ? Number(y) - 543 : Number(y);\n            \n            const [hh, mm, ss] = timePart.split(':').map(Number);\n            return new Date(baseY, Number(m) - 1, Number(d), hh || 0, mm || 0, ss || 0);\n        }\n        if (raw.includes('-')) {\n            const datePart = raw.split(' ')[0];\n            const timePart = raw.split(' ')[1] || \"00:00:00\";\n            const [y, m, d] = datePart.split('-');\n            const baseY = Number(y) > 2500 ? Number(y) - 543 : Number(y);\n            \n            const [hh, mm, ss] = timePart.split(':').map(Number);\n            return new Date(baseY, Number(m) - 1, Number(d), hh || 0, mm || 0, ss || 0);\n        }\n        return new Date(raw);\n    } catch {\n        return null;\n    }\n}\n\nconst preFilteredItems = [];\n\nfor (const item of items) {\n    const j = item.json || item;\n    const sniperText = j.SNIPER_X_TEXT || \"\";\n\n    const phone = String(j.phone || '').replace(/[^0-9]/g, '');\n    const cleanPhone9 = phone.slice(-9);\n    const fbName = String(j.facebook_name || '').trim().toLowerCase().replace(/\\s+/g, '');\n    const orderNum = String(j.order_number || '').trim().toLowerCase().replace(/[^0-9a-z]/g, '');\n\n    j.singto_empires_pkey = `${fbName}_${cleanPhone9}`.toLowerCase();\n    j.message_ref_id = j.id;\n\n    const orderTimeRaw = j.order_time || j.ordered_at || \"\";\n    let orderDateStr = \"\";\n    let orderDateObj = parseOrderDate(orderTimeRaw);\n    \n    if (orderTimeRaw) {\n        const rawDatePart = String(orderTimeRaw).split(' ')[0];\n        const dateParts = rawDatePart.split('/');\n        if (dateParts.length === 3) {\n            const d = String(dateParts[0].trim()).padStart(2, '0');\n            const m = String(dateParts[1].trim()).padStart(2, '0');\n            const y = dateParts[2].trim();\n            orderDateStr = `${d}/${m}/${y}`;\n        }\n    }\n\n    if (!orderNum || orderNum.length < 5) {\n        continue; \n    }\n\n    if (sniperText.includes(\"👻\") || sniperText.includes(\"Ghost_Black\") || sniperText.toLowerCase().includes(\"black\")) {\n        continue;\n    }\n\n    let isToday = false;\n    let orderDayName = autoDayName;\n    if (orderDateObj && !isNaN(orderDateObj.getTime())) {\n        isToday = orderDateObj.getDate() === todayD && orderDateObj.getMonth() === todayM && orderDateObj.getFullYear() === todayY;\n        orderDayName = dayNames[orderDateObj.getDay()];\n        \n        // 🛑 กฎเหล็กใหม่: ถ้ามี timestamp ให้เช็คว่าเก่ากว่า \"บ่าย 2 โมงเมื่อวาน\" หรือไม่ ถ้าเก่ากว่าให้ดีดทิ้งทันที\n        if (orderDateObj.getTime() < yesterdayBKK.getTime()) {\n            continue; // ดีดทิ้งเพราะสั่งก่อน 14:00 ของเมื่อวาน\n        }\n    } else if (orderDateStr) {\n        isToday = todayMatches.includes(orderDateStr);\n        if (!isToday) {\n            // ถ้าเป็นวันที่อื่นที่ไม่ใช่วันนี้และไม่มีเวลาชัดเจน ให้ดีดทิ้งเพื่อความปลอดภัย\n            continue;\n        }\n    } else {\n        isToday = true;\n    }\n\n    j.is_today_order = isToday;\n    j.order_day_name = orderDayName;\n    preFilteredItems.push({ json: j });\n}\n\nfor (const item of preFilteredItems) {\n    const d = item.json;\n    const settingByOrderDay = colorMap[d.order_day_name] || { color: \"⚪ White\", emoji: \"⚪\", icon: \"✨\" };\n\n    d.status_color = settingByOrderDay.color;\n    d.routing_tag = settingByOrderDay.color;\n    d.status_color_backup = settingByOrderDay.color;\n    d.routing_tag_backup = settingByOrderDay.color;\n    d.is_safety_white = true;\n    d.emoji = settingByOrderDay.emoji;\n    d.order_number_stamped = `${settingByOrderDay.emoji} ${d.order_number || ''}`;\n    \n    output.push({ json: d });\n}\n\nreturn output;"
+      },
+      "id": "29939aba-0df0-4abc-8110-106ff297bc6b",
+      "name": "🛡️Unified Security & Lucky Color Gateway1",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1104,
+        800
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const timeline = $input.first().json.chat_timeline || [];\n// 1. หาข้อความลูกค้าที่มี / และมี ม. ต.\nlet customerAddrRaw = [...timeline].reverse().find(t => t.includes('[ลูกค้า:') && t.includes('/') && t.includes('ม.')) || \"\";\n\nlet parts = customerAddrRaw.split('/').map(s=>s.trim());\nlet name = parts[0]?.replace(/.*\\[ลูกค้า:\\s*/,'') || \"\";\nlet address = parts[1] || \"\";\nlet phone = (customerAddrRaw.match(/0[0-9\\-]{8,10}/)?.[0] || \"\").replace(/-/g,'');\n\n// 2. COD เอาจากสรุปของเพจ อันนี้จริง\nlet pageBlock = [...timeline].reverse().find(t=>t.includes('COD:')) || \"\";\nlet cod = pageBlock.match(/COD:\\s*([0-9,]+)/)?.[1] || \"350\";\nlet product = pageBlock.match(/CAVALLO[^\\n]+คอต\\.?|MOND[^\\n]+คอต\\.?|VESS[^\\n]+คอต\\.?/i)?.[0] || \"CAVALLO_WATERMELON 1 คอต\";\n\nreturn [{\n  ...$input.first().json,\n  customer_name: name, // นายมนตรี กาลพรมมา\n  phone: phone, // 0806783457\n  short_address: address, // อาคารที่พักนักท่องเที่ยวบึงบอระเพ็ด ม.3...\n  cod_amount: Number(cod.replace(/,/g,'')),\n  final_display_for_packer: product.trim(),\n  single_cleaned_block: `${name}\\n${phone}\\n${address}\\nCOD ${cod} - ${product}`\n}];"
+      },
+      "id": "9c4e11ac-339e-4128-8727-ee0f3fe50770",
+      "name": "Data Doctor Node Deployed 🩺⚡",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2000,
+        896
+      ],
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://gibyloawclbmeqlsjmld.supabase.co/rest/v1/bb_order",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "on_conflict",
+              "value": "upsert_key"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdpYnlsb2F3Y2xibWVxbHNqbWxkIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4ODI2MTc4NywiZXhwIjoyMTAzODM3Nzg3fQ.vB7BCY5PeRmM04NwcYTJIUrvP4FcmcKfY_LEfqwsN-s"
+            },
+            {
+              "name": "Prefer",
+              "value": "resolution=merge-duplicates,return=representation"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{\n{\n  \"upsert_key\": $json.upsert_key ?? null,\n  \"order_number\": $json.order_number ?? null,\n  \"order_date\": $json.order_date ?? null,\n  \"order_time\": $json.order_time ?? null,\n  \"time_th\": $json.time_th ?? null,\n  \"day_of_week\": $json.day_of_week ?? null,\n  \"page_name\": $json.page_name ?? null,\n  \"page_id\": $json.page_id ?? null,\n  \"facebook_name\": $json.facebook_name ?? null,\n  \"customer_name\": $json.customer_name ?? null,\n  \"recipient_id\": $json.recipient_id ?? null,\n  \"threadId\": $json.threadId ?? null,\n  \"thread_id\": $json.thread_id ?? null,\n  \"message_id\": $json.message_id ?? null,\n\n  \"phone\": $json.phone ?? $json.extracted_phone ?? null,\n  \"extracted_phone\": $json.extracted_phone ?? $json.phone ?? null,\n  \"phone_clean\": $json.extracted_phone ?? $json.extracted_phone ?? $json.phone ?? null,\n  \"cod_amount\": $json.cod_amount == null ? null : Number($json.cod_amount),\n  \"raw_cod_amount\": $json.raw_cod_amount == null ? null : Number($json.raw_cod_amount),\n  \"expected_cod\": $json.expected_cod == null ? null : Number($json.expected_cod),\n  \"unit_price\": $json.unit_price == null ? null : Number($json.unit_price),\n  \"cod_check_status\": $json.cod_check_status ?? null,\n  \"lock_status\": $json.lock_status ?? null,\n\n  \"alias\": $json.alias ?? null,\n  \"alias_norm\": $json.alias_norm ?? null,\n  \"alias_text\": $json.alias_text ?? null,\n  \"aliases\": $json.aliases ?? null,\n  \"sku\": $json.sku ?? null,\n  \"product_name\": $json.product_name ?? null,\n  \"th_name\": $json.th_name ?? null,\n  \"brand\": $json.brand ?? null,\n  \"parsed_product_raw\": $json.parsed_product_raw ?? null,\n  \"extracted_product_block\": $json.extracted_product_block ?? null,\n  \"display_for_packer\": $json.display_for_packer ?? null,\n  \"final_display_for_packer\": $json.final_display_for_packer ?? null,\n  \"telegram_final_mapped\": $json.final_display_for_packer ?? $json.telegram_final_mapped ?? null,\n  \"display_label\": $json.display_label ?? null,\n\n  \"quantity\": $json.quantity == null ? null : Number($json.quantity),\n  \"qty\": $json.qty == null ? null : Number($json.qty),\n  \"extracted_qty\": $json.extracted_qty == null ? null : Number($json.extracted_qty),\n  \"parsed_quantity\": $json.parsed_quantity == null ? null : Number($json.parsed_quantity),\n\n  \"emoji\": $json.emoji ?? null,\n  \"extracted_emoji\": $json.extracted_emoji ?? null,\n  \"emoji_master\": $json.emoji_master ?? null,\n\n  \"addressclean\": $json.addressclean == null ? null : String($json.addressclean).slice(0, 5000),\n  \"parsedLocationOnly\": $json.parsedLocationOnly == null ? null : String($json.parsedLocationOnly).slice(0, 5000),\n  \"address_display_packer\": $json.address_display_packer == null ? null : String($json.address_display_packer).slice(0, 5000),\n  \"short_address\": $json.short_address == null ? null : String($json.short_address).slice(0, 5000),\n  \"address_line_1\": $json.address_line_1 == null ? null : String($json.address_line_1).slice(0, 5000),\n  \"address_line_2\": $json.address_line_2 == null ? null : String($json.address_line_2).slice(0, 5000),\n  \"full_address\": $json.full_address ?? $json.addressclean ?? $json.address_display_packer ?? null,\n  \"district\": $json.district ?? null,\n  \"amphoe\": $json.amphoe ?? null,\n  \"province\": $json.province ?? null,\n  \"zipcode\": $json.zipcode ?? null,\n\n  \"sniper_x_text_clean\": $json.sniper_x_text_clean ?? null,\n  \"clean_text\": $json.clean_text ?? null,\n  \"single_cleaned_block\": $json.single_cleaned_block ?? null,\n  \"debug_block\": $json.debug_block ?? null,\n  \"debug_prod\": $json.debug_prod ?? null,\n  \"warning_tag\": $json.warning_tag ?? null,\n  \"repair_log\": $json.repair_log ?? null,\n\n  \"audit_status\": $json.audit_status ?? null,\n  \"audit_flags\": $json.audit_flags ?? null,\n  \"audit_badge\": $json.audit_badge ?? null,\n  \"parser_mode\": $json.parser_mode ?? null,\n  \"is_ready_to_pack\": $json.is_ready_to_pack ?? false,\n  \"order_status\": $json.order_status ?? null,\n  \"sen_status\": $json.sen_status ?? \"ยังไม่ส่ง\",\n  \"telegram_status\": $json.telegram_status ?? \"PENDING\",\n  \"line_status\": $json.line_status ?? \"PENDING\",\n  \"messenger_status\": $json.messenger_status ?? \"PENDING\",\n  \"stock_status\": $json.stock_status ?? null,\n  \"is_out_of_stock\": $json.is_out_of_stock ?? false,\n\n  \"telegram_message\": $json.telegram_message ?? null,\n  \"telegram_copy_text\": $json.telegram_copy_text ?? null,\n  \"packer_copy_text\": $json.packer_copy_text ?? null,\n  \"telegram_chat_id\": $json.telegram_chat_id ?? null,\n  \"telegram_body\": $json.telegram_body ?? {},\n  \"detected_products\": $json.detected_products ?? [],\n\n  \"assigned_hashtag\": $json.assigned_hashtag ?? null,\n  \"singto_empires_pkey\": $json.singto_empires_pkey ?? null,\n  \"updated_at\": new Date().toISOString()\n}\n}}",
+        "options": {}
+      },
+      "id": "5785d58b-eea1-4cb0-bdb2-1e0fe63f6903",
+      "name": "👑 bb_orders3",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        2192,
+        1056
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "TNTFGMoEnjQ5puen",
+          "name": "👽คำวิบัติ(ซบ)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "// n8n Code node: 🌌 HERMES_CHAT_RAW_ALL\n// Mode: Run Once for All Items\n// Input: one item per page from 🌌 HERMES_FETCH_FACEBOOK_ALL.\n// This node does not filter COD or speaker; it preserves every message and timestamp.\n\nconst output = [];\nconst now = new Date().toISOString();\n\nfunction cleanText(value) {\n  return String(value ?? \"\").replace(/udfe[0-9a-fA-F]{0,4}/gi, \"\").replace(/\\\\?ud[0-9a-fA-F]+/gi, \"\").replace(/\\\\n/g, \"\\n\").replace(/\\\\\\s*n/gi, \"\\n\").trim();\n}\nfunction attachmentsOf(message) {\n  if (Array.isArray(message.attachments?.data)) return message.attachments.data;\n  return Array.isArray(message.attachments) ? message.attachments : [];\n}\nfunction imageUrlsOf(attachments) {\n  const urls = [];\n  for (const attachment of attachments) {\n    const candidates = [\n      attachment.url,\n      attachment.file_url,\n      attachment.payload?.url,\n      attachment.image_data?.url,\n      attachment.target?.url,\n    ];\n    for (const url of candidates) {\n      if (typeof url === \"string\" && /^https?:\\/\\//i.test(url) && !urls.includes(url)) urls.push(url);\n    }\n  }\n  return urls;\n}\n\nfor (const item of $input.all()) {\n  const source = item.json ?? {};\n  const graph = source.facebook_response ?? source.body ?? source;\n  const pageId = String(source.page_id ?? source.pageId ?? graph.page_id ?? \"\");\n  const pageName = source.page_name ?? source.pageName ?? null;\n  const conversations = Array.isArray(graph.data) ? graph.data : Array.isArray(graph.conversations) ? graph.conversations : [];\n\n  for (const conversation of conversations) {\n    const conversationId = String(conversation.id ?? \"\");\n    const participants = Array.isArray(conversation.participants?.data) ? conversation.participants.data : [];\n    // HTTP Request nodes can return only Facebook's body and drop the input\n    // config. Recover the page context from the participant with a long Meta\n    // Page ID; this matches the real Graph response shape.\n    const inferredPage = participants.find(participant => String(participant.id ?? \"\").length > 10);\n    const conversationPageId = pageId || String(inferredPage?.id ?? \"\");\n    const conversationPageName = pageName || inferredPage?.name || null;\n    const messages = Array.isArray(conversation.messages?.data) ? conversation.messages.data : [];\n\n    if (!messages.length) {\n      output.push({ json: { record_type: \"conversation\", page_id: conversationPageId, page_name: conversationPageName, page_index: source.page_index ?? null, conversation_id: conversationId, conversation_key: conversationId, conversation_updated_time: conversation.updated_time ?? null, conversation_message_count: conversation.message_count ?? 0, conversation_unread_count: conversation.unread_count ?? 0, can_reply: conversation.can_reply ?? null, participants, fetched_at: source.fetched_at ?? now, fetch_status: source.fetch_status ?? \"success\", raw_conversation: conversation } });\n      continue;\n    }\n\n    for (const message of messages) {\n      const messageId = String(message.id ?? \"\");\n      const fromId = String(message.from?.id ?? \"\");\n      const fromEmail = String(message.from?.email ?? \"\");\n      const occurredAt = message.created_time ?? conversation.updated_time ?? source.fetched_at ?? now;\n      const text = cleanText(message.message ?? message.text ?? \"\");\n      const attachments = attachmentsOf(message);\n      const imageUrls = imageUrlsOf(attachments);\n      const isEcho = message.is_echo === true;\n      // Some Meta exports mark page automation as is_echo=false and may also\n      // return a different room/page ID. The explicit page email marker and\n      // sender/page-name match are stronger evidence than the room ID alone.\n      const explicitPageSender = /@facebook\\.com$/i.test(fromEmail)\n        || Boolean(conversationPageName && message.from?.name && message.from.name === conversationPageName);\n      const speakerHint = isEcho || (conversationPageId && fromId === conversationPageId) || explicitPageSender ? \"page\" : \"customer\";\n      const dedupeKey = [\"meta\", conversationPageId, conversationId, messageId || occurredAt, text.slice(0, 100)].join(\":\");\n\n      output.push({ json: {\n        record_type: \"message\",\n        page_id: conversationPageId, page_name: conversationPageName, page_index: source.page_index ?? null,\n        conversation_id: conversationId, conversation_key: conversationId,\n        conversation_updated_time: conversation.updated_time ?? null,\n        conversation_message_count: conversation.message_count ?? null,\n        conversation_unread_count: conversation.unread_count ?? null,\n        can_reply: conversation.can_reply ?? null, participants,\n        message_id: messageId || null, source_message_id: messageId || null, dedupe_key: dedupeKey,\n        message_text: text, message_type: imageUrls.length ? \"image\" : attachments.length ? \"attachment\" : \"text\", attachments,\n        attachment_count: attachments.length, has_image: imageUrls.length > 0, image_urls: imageUrls,\n        shares: message.shares ?? null, sticker: message.sticker ?? null,\n        message_from: message.from ?? null, message_from_id: fromId || null, message_from_name: message.from?.name ?? null,\n        message_from_is_page: explicitPageSender, message_is_echo: isEcho, speaker_hint: speakerHint,\n        message_created_time: message.created_time ?? null, occurred_at: occurredAt,\n        fetched_at: source.fetched_at ?? now, fetch_status: source.fetch_status ?? \"success\",\n        raw_conversation: conversation, raw_message: message,\n      } });\n    }\n  }\n}\n\n// n8n stops a branch when a Code node returns zero items. Return a harmless\n// status item on an empty API window; downstream processors skip non-message\n// records, so this prevents a false workflow stop without inventing a chat.\nif (!output.length) {\n  output.push({\n    json: {\n      record_type: \"sync_status\",\n      status: \"empty\",\n      message_count: 0,\n      fetched_at: now,\n      note: \"Facebook API returned no conversations/messages in this window\",\n    },\n  });\n}\n\nreturn output;\n\n// Downstream processors decide the final speaker/table. Keep raw_message for audit and troubleshooting.\n"
+      },
+      "id": "hermes-chat-raw-all",
+      "name": "🌌 HERMES_CHAT_RAW_ALL",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        760,
+        620
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "// n8n Code node: 💬 CUSTOMER_CHAT_PROCESSOR\n// Mode: Run Once for All Items\n// Input: 🌌 HERMES_CHAT_RAW_ALL\n// Output: one item per customer message for chat_customer_messages.\n\nconst output = [];\nconst seen = new Set();\n\nfor (const item of $input.all()) {\n  const row = item.json ?? {};\n\n  // Support both HERMES versions:\n  // - new: record_type=\"message\"\n  // - older raw node: message_id/message_text without record_type\n  const isMessage = row.record_type === \"message\"\n    || Boolean(row.message_id || row.source_message_id || row.message_text);\n  if (!isMessage) continue;\n\n  const pageId = String(row.page_id ?? row.pageId ?? \"\");\n  const from = row.message_from ?? row.from ?? {};\n  const fromId = String(row.message_from_id ?? row.sender_id ?? from.id ?? \"\");\n  const fromName = String(row.message_from_name ?? row.sender_name ?? from.name ?? \"\");\n  const fromEmail = String(from.email ?? row.message_from_email ?? \"\");\n  const pageName = String(row.page_name ?? row.pageName ?? \"\");\n\n  // Prefer explicit classification from HERMES. Keep old fallbacks so this\n  // node remains compatible with the previous raw output shape.\n  const isPage = row.speaker_hint === \"page\"\n    || row.message_from_is_page === true\n    || row.message_is_echo === true\n    || row.is_echo === true\n    || (fromId !== \"\" && pageId !== \"\" && fromId === pageId)\n    || /@facebook\\.com$/i.test(fromEmail)\n    || (pageName !== \"\" && fromName !== \"\" && pageName === fromName);\n  if (isPage) continue;\n\n  const conversationKey = String(row.conversation_key ?? row.conversation_id ?? row.thread_id ?? row.threadId ?? \"\");\n  const messageId = String(row.source_message_id ?? row.message_id ?? \"\");\n  const text = row.message_text ?? row.message ?? row.text ?? \"\";\n  const occurredAt = row.occurred_at ?? row.message_created_time ?? row.created_time ?? null;\n  const dedupeKey = String(row.dedupe_key ?? `meta:${pageId}:${conversationKey}:${messageId || occurredAt || text}`);\n  if (seen.has(dedupeKey)) continue;\n  seen.add(dedupeKey);\n\n  output.push({ json: {\n    source_message_id: messageId || null,\n    dedupe_key: dedupeKey,\n    page_id: pageId,\n    page_name: pageName || null,\n    conversation_key: conversationKey,\n    customer_id: fromId || null,\n    customer_name: fromName || null,\n    speaker_type: \"customer\",\n    side: \"left\",\n    message_text: String(text),\n    message_type: row.message_type ?? (Array.isArray(row.attachments) && row.attachments.length ? \"attachment\" : \"text\"),\n    attachments_json: row.attachments_json ?? row.attachments ?? [],\n    image_urls: row.image_urls ?? [],\n    has_image: row.has_image === true || (Array.isArray(row.image_urls) && row.image_urls.length > 0),\n    attachment_count: row.attachment_count ?? (Array.isArray(row.attachments) ? row.attachments.length : 0),\n    shares_json: row.shares_json ?? row.shares ?? null,\n    sticker_json: row.sticker_json ?? row.sticker ?? null,\n    occurred_at: occurredAt,\n    source_created_at: row.message_created_time ?? row.created_time ?? null,\n    synced_at: row.fetched_at ?? new Date().toISOString(),\n    raw_payload: row.raw_payload ?? {\n      page_id: pageId,\n      conversation_id: row.conversation_id ?? conversationKey,\n      message_id: row.message_id ?? messageId,\n      message: text,\n      from,\n      is_echo: row.message_is_echo ?? row.is_echo ?? false,\n      attachments: row.attachments ?? [],\n      shares: row.shares ?? null,\n      sticker: row.sticker ?? null,\n    },\n  } });\n}\n\n// Return a status item instead of zero items so n8n does not stop when a\n// polling window contains only page messages.\nif (!output.length) {\n  return [{ json: { record_type: \"sync_status\", status: \"no_customer_messages\", message_count: 0, synced_at: new Date().toISOString() } }];\n}\nreturn output;\n\n// Supabase destination: chat_customer_messages; Upsert conflict: dedupe_key.\n"
+      },
+      "id": "customer-chat-processor",
+      "name": "💬 CUSTOMER_CHAT_PROCESSOR",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1060,
+        520
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "// n8n Code node: 🟣 PAGE_CHAT_PROCESSOR\n// Mode: Run Once for All Items\n// Input: 🌌 HERMES_CHAT_RAW_ALL. Output maps to chat_page_messages.\n\nconst output = [];\nconst seen = new Set();\nfor (const item of $input.all()) {\n  const row = item.json;\n  if (row.record_type !== \"message\") continue;\n  const pageId = String(row.page_id ?? \"\");\n  const fromId = String(row.message_from_id ?? \"\");\n  const isPage = row.speaker_hint === \"page\" || row.message_from_is_page === true || row.message_is_echo === true || fromId === pageId;\n  if (!isPage) continue;\n  const dedupeKey = String(row.dedupe_key ?? `meta:${pageId}:${row.conversation_key}:${row.source_message_id ?? \"\"}`);\n  if (seen.has(dedupeKey)) continue;\n  seen.add(dedupeKey);\n  output.push({ json: {\n    source_message_id: row.source_message_id ?? null,\n    dedupe_key: dedupeKey,\n    page_id: pageId, page_name: row.page_name ?? null,\n    conversation_key: row.conversation_key ?? row.conversation_id ?? null,\n    page_sender_id: fromId || null, page_sender_name: row.message_from_name ?? null,\n    speaker_type: \"page\", side: \"right\",\n    message_text: row.message_text ?? \"\", message_type: row.message_type ?? \"text\",\n    attachments_json: row.attachments ?? [], image_urls: row.image_urls ?? [], has_image: row.has_image === true, attachment_count: row.attachment_count ?? 0, shares_json: row.shares ?? null, sticker_json: row.sticker ?? null,\n    occurred_at: row.occurred_at ?? row.message_created_time ?? null,\n    source_created_at: row.message_created_time ?? null, synced_at: row.fetched_at ?? new Date().toISOString(),\n    raw_payload: { page_id: row.page_id, conversation_id: row.conversation_id, message_id: row.message_id, message: row.message_text, from: row.message_from, is_echo: row.message_is_echo, attachments: row.attachments, shares: row.shares, sticker: row.sticker },\n  } });\n}\nreturn output;\n\n// Supabase destination: chat_page_messages; operation Upsert; conflict column: dedupe_key.\n"
+      },
+      "id": "page-chat-processor",
+      "name": "🟣 PAGE_CHAT_PROCESSOR",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1060,
+        720
+      ]
+    }
+  ],
+  "connections": {
+    "🌌HERMES_DATA_JOURNEY1": {
+      "main": [
+        [
+          {
+            "node": "🍁🎱ORDERMYSTORY",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "🌌 HERMES_CHAT_RAW_ALL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "🍁🎱ORDERMYSTORY": {
+      "main": [
+        [
+          {
+            "node": "👑 bb_orders2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "จานเกิ้ล": {
+      "main": [
+        []
+      ]
+    },
+    "👑 bb_orders": {
+      "main": [
+        [
+          {
+            "node": "จานเกิ้ล",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "👳‍♂️จาร์ยGOOGLE1": {
+      "main": [
+        [
+          {
+            "node": "👑 bb_orders",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Data Doctor Node Deployed 🩺⚡",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "🌈Lucky colors by the day": {
+      "main": [
+        [
+          {
+            "node": "👳‍♂️จาร์ยGOOGLE1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "🟨UNIVERSAL TRANSFORMER1": {
+      "main": [
+        [
+          {
+            "node": "🌈Lucky colors by the day",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "👑 bb_orders2": {
+      "main": [
+        [
+          {
+            "node": "🛡️Unified Security & Lucky Color Gateway1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "🛡️Unified Security & Lucky Color Gateway1": {
+      "main": [
+        [
+          {
+            "node": "🟨UNIVERSAL TRANSFORMER1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Data Doctor Node Deployed 🩺⚡": {
+      "main": [
+        [
+          {
+            "node": "👑 bb_orders3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "🌌 HERMES_CHAT_RAW_ALL": {
+      "main": [
+        [
+          {
+            "node": "💬 CUSTOMER_CHAT_PROCESSOR",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "🟣 PAGE_CHAT_PROCESSOR",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "💬 CUSTOMER_CHAT_PROCESSOR": {
+      "main": [
+        []
+      ]
+    },
+    "🟣 PAGE_CHAT_PROCESSOR": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "1d6bf73ad355c99306c566d353e90bd46d794e3f081b85f78f04bfaf4e22c1c1"
+  },
+  "name": "Thai Order + HERMES Customer/Page Chat Branch",
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  }
+}
