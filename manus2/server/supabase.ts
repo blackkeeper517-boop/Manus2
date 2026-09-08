@@ -137,7 +137,7 @@ export type ExternalChatMessage = {
 const orderSelect = [
   "id", "upsert_key", "order_number", "order_date", "order_time", "created_at", "updated_at",
   "customer_name", "facebook_name", "phone", "full_address", "address_display_packer",
-  "page_name", "page_id", "thread_id", "threadId", "cod_amount", "expected_cod", "sku", "th_name", "emoji", "display_label",
+  "page_name", "page_id", "thread_id", "threadId", "cod_amount", "expected_cod", "sku", "th_name", "emoji",
   "display_for_packer", "final_display_for_packer", "raw_text", "raw_text_with_phone", "raw_text_with_phone_timed", "full_chunk_text", "chat_timeline", "addressclean", "short_address", "single_cleaned_block", "bubble_window", "qty", "telegram_sent", "extracted_phone", "has_phone", "has_cod", "telegram_status", "order_status", "audit_status", "audit_flags",
   "cod_check_status", "is_ready_to_pack", "telegram_message", "telegram_copy_text", "telegram_chat_id", "clean_text", "single_cleaned_block", "telegram_body", "packer_copy_text", "source_system",
 ].join(",");
