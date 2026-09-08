@@ -1,0 +1,10 @@
+import { readFileSync, writeFileSync } from "node:fs";
+const path = "server/supabase.ts";
+let source = readFileSync(path, "utf8");
+const start = source.indexOf("  const orders = (await fetchLiveOrders(search)).filter(order => Boolean(order.page_id || order.page_name));", source.indexOf("export async function fetchLiveThreads"));
+const end = source.indexOf("  for (const message of allMessages) {", start);
+if (start < 0 || end < 0) throw new Error("Could not locate order-seeding block");
+source = source.slice(0, start) + "  const externalMessages = await fetchExternalChatMessages();\n  const allMessages = externalMessages;\n" + source.slice(end);
+source = source.replace("      customerName: null,\n      chatTimeline: [],", "      customerName: message.customerName ?? (message.senderType === \"customer\" ? message.senderName : null),\n      chatTimeline: [],");
+source = source.replace("    if ((Date.parse(messageAt) || 0) > (Date.parse(String(thread.latestAt ?? \"\")) || 0)) {", "    if (!thread.customerName && message.customerName) thread.customerName = message.customerName;\n    if ((Date.parse(messageAt) || 0) > (Date.parse(String(thread.latestAt ?? \"\")) || 0)) {");
+writeFileSync(path, source);
