@@ -55,7 +55,15 @@ export async function sendMetaMessage(input: { pageId: string; recipientId: stri
     headers: { "content-type": "application/json" },
     body: JSON.stringify({ recipient: { id: input.recipientId }, messaging_type: "RESPONSE", message }),
   });
-  const result = await response.json() as { message_id?: string; recipient_id?: string; error?: { message?: string; code?: number; error_subcode?: number; fbtrace_id?: string } };
+  const responseText = await response.text();
+  let result: { message_id?: string; recipient_id?: string; error?: { message?: string; code?: number; error_subcode?: number; fbtrace_id?: string } } = {};
+  try {
+    result = JSON.parse(responseText) as typeof result;
+  } catch {
+    if (!response.ok) {
+      throw new Error(`META_SEND_FAILED: Meta returned HTTP ${response.status}: ${responseText.slice(0, 500) || "ไม่มีรายละเอียด"}`);
+    }
+  }
   if (!response.ok) {
     const message = result.error?.message || `Meta Send API returned HTTP ${response.status}`;
     if (result.error?.code === 10 || /another app|currently controlling|ควบคุมเธรด|แอพอื่นกำลังควบคุม/i.test(message)) {
