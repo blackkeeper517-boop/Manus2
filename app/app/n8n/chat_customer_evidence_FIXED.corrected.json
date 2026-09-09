@@ -1,0 +1,31 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://gibyloawclbmeqlsjmld.supabase.co/rest/v1/chat_customer_evidence",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendQuery": true,
+        "queryParameters": { "parameters": [{ "name": "on_conflict", "value": "dedupe_key" }] },
+        "sendHeaders": true,
+        "headerParameters": { "parameters": [
+          { "name": "Prefer", "value": "resolution=merge-duplicates,return=minimal" },
+          { "name": "Content-Type", "value": "application/json" }
+        ] },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ (() => { const j = $json; const nonEmpty = (...v) => v.find(x => x !== null && x !== undefined && String(x).trim() && String(x) !== 'null' && String(x) !== 'undefined'); const toIso = value => { if (value === null || value === undefined || !String(value).trim()) return null; const s = String(value).trim(); const m = s.match(/^(\\d{1,2})[\\/-](\\d{1,2})[\\/-](\\d{2,4})(?:[ T](\\d{1,2}):(\\d{2})(?::(\\d{2})(?:\\.(\\d+))?)?)?$/); if (m) { let y = Number(m[3]); if (y > 2400) y -= 543; else if (y < 100) y += 2000; const local = `${String(y).padStart(4,'0')}-${String(m[2]).padStart(2,'0')}-${String(m[1]).padStart(2,'0')}T${String(m[4] || '00').padStart(2,'0')}:${m[5] || '00'}:${m[6] || '00'}.${String(m[7] || '0').padEnd(3,'0')}+07:00`; const d = new Date(local); return isNaN(d.getTime()) ? null : d.toISOString(); } const z = s.replace(/([+-]\\d{2})(\\d{2})$/, '$1:$2'); const hasZone = /(?:Z|[+-]\\d{2}:?\\d{2})$/i.test(z); const d = new Date(hasZone ? z : `${z.replace(' ','T')}+07:00`); return isNaN(d.getTime()) ? null : d.toISOString(); }; const pageId = String(nonEmpty(j.page_id,j.recipient_id) || 'PAGE_UNASSIGNED'); const conversationKey = String(nonEmpty(j.conversation_key,j.thread_id,j.threadId) || 'CONVERSATION_UNASSIGNED'); const sourceId = String(nonEmpty(j.source_message_id,j.message_id) || `${pageId}_${conversationKey}_${j.timestamp || 'EVENT'}`); const occurredAt = toIso(nonEmpty(j.occurred_at,j.message_created_time,j.created_time,j.time,j.timestamp)) || new Date().toISOString(); const sourceCreatedAt = toIso(nonEmpty(j.source_created_at,j.message_created_time,j.created_time,j.time,j.timestamp)) || occurredAt; const dedupeKey = String(nonEmpty(j.dedupe_key) || `${pageId}:${conversationKey}:${sourceId}`); const text = String(nonEmpty(j.message_text,j.raw_message,j.clean_text,j.sniper_x_text_clean,j.items_text) || 'ไม่พบข้อความต้นฉบับ'); const attachments = Array.isArray(j.attachments_json) ? j.attachments_json : []; const images = Array.isArray(j.image_urls) ? j.image_urls : []; return { source_message_id: sourceId, dedupe_key: dedupeKey, page_id: pageId, page_name: String(nonEmpty(j.page_name,j.pageName) || 'UNKNOWN_PAGE'), conversation_key: conversationKey, customer_id: String(nonEmpty(j.customer_id,j.sender_id) || conversationKey), customer_name: String(nonEmpty(j.customer_name,j.facebook_name) || 'UNKNOWN_CUSTOMER'), sender_id: String(nonEmpty(j.sender_id,j.customer_id) || conversationKey), sender_name: String(nonEmpty(j.sender_name,j.customer_name,j.facebook_name) || 'UNKNOWN_SENDER'), speaker_type: 'customer', message_text: text, message_type: String(j.message_type || 'text'), attachments_json: attachments, image_urls: images, has_image: Boolean(j.has_image || images.length), attachment_count: Number(j.attachment_count || attachments.length), shares_json: j.shares_json || null, sticker_json: j.sticker_json || null, occurred_at: occurredAt, source_created_at: sourceCreatedAt, raw_payload: j.raw_payload || j, ingestion_source: String(j.ingestion_source || 'meta_n8n_polling'), page_sender_id: String(j.page_sender_id || pageId), page_sender_name: String(j.page_sender_name || j.page_name || 'UNKNOWN_PAGE'), side: String(j.side || 'customer'), bubble_window: String(j.bubble_window || `HISTORY_${j.order_number || conversationKey}`) }; })() }}",
+        "options": {}
+      },
+      "id": "d41be710-092e-4e7c-86d2-0a2cfa52ef84",
+      "name": "🔮chat_customer_evidence_FIXED",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [-3728, 7472]
+    }
+  ],
+  "connections": {},
+  "pinData": {},
+  "meta": { "instanceId": "1d6bf73ad355c99306c566d353e90bd46d794e3f081b85f78f04bfaf4e22c1c1" }
+}

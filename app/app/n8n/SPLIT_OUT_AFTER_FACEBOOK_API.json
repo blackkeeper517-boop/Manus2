@@ -1,0 +1,26 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "fieldToSplitOut": "data",
+        "include": "allOtherFields",
+        "options": {}
+      },
+      "id": "split-facebook-conversations",
+      "name": "🌌 SPLIT_OUT_FACEBOOK_CONVERSATIONS",
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        -520,
+        320
+      ]
+    }
+  ],
+  "connections": {
+    "🌌 SPLIT_OUT_FACEBOOK_CONVERSATIONS": {
+      "main": [
+        []
+      ]
+    }
+  }
+}

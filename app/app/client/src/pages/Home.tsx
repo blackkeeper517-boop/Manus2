@@ -1,0 +1,93 @@
+import { Badge } from "@/components/ui/badge";
+import { useAuth } from "@/_core/hooks/useAuth";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator";
+import { Textarea } from "@/components/ui/textarea";
+import { trpc } from "@/lib/trpc";
+import { Archive, CheckCircle2, Code2, Database, FileCode2, FileJson2, FileText, FolderKanban, LucideIcon, Plus, Save, Search, ShieldCheck, Sparkles } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { PRESENTATION_MODE } from "@shared/presentation";
+
+const kindLabels: Record<string, string> = { code: "โค้ด", sql: "SQL", workflow: "Workflow", document: "เอกสาร", config: "ตั้งค่า", other: "อื่น ๆ" };
+const kindColors: Record<string, string> = { code: "border-blue-400/20 bg-blue-400/10 text-blue-200", sql: "border-emerald-400/20 bg-emerald-400/10 text-emerald-200", workflow: "border-violet-400/20 bg-violet-400/10 text-violet-200", document: "border-fuchsia-400/20 bg-fuchsia-500/10 text-fuchsia-200", config: "border-white/10 bg-white/5 text-slate-300", other: "border-white/10 bg-white/5 text-slate-400" };
+
+function iconFor(kind: string) {
+  if (kind === "sql") return <Database className="h-4 w-4 text-emerald-300" />;
+  if (kind === "workflow") return <FileJson2 className="h-4 w-4 text-violet-300" />;
+  if (kind === "code") return <FileCode2 className="h-4 w-4 text-blue-300" />;
+  if (kind === "document") return <FileText className="h-4 w-4 text-fuchsia-300" />;
+  return <Archive className="h-4 w-4 text-slate-400" />;
+}
+
+function formatDate(value: string | Date | null | undefined) {
+  if (!value) return "ยังไม่มีข้อมูล";
+  return new Intl.DateTimeFormat("th-TH", { day: "numeric", month: "short", year: "numeric" }).format(new Date(value));
+}
+
+export default function Home() {
+  const { user, loading: authLoading } = useAuth();
+  const utils = trpc.useUtils();
+  const [vaultUnlocked, setVaultUnlocked] = useState(PRESENTATION_MODE);
+  const [accessCode, setAccessCode] = useState("");
+  const { data: projects = [], isLoading: projectsLoading } = trpc.vault.projects.useQuery(undefined, { enabled: vaultUnlocked && (PRESENTATION_MODE || user?.role === "admin") });
+  const { data: stats } = trpc.vault.stats.useQuery(undefined, { enabled: vaultUnlocked && (PRESENTATION_MODE || user?.role === "admin") });
+  const [projectId, setProjectId] = useState<number | null>(null);
+  const [fileId, setFileId] = useState<number | null>(null);
+  const [search, setSearch] = useState("");
+  const [newName, setNewName] = useState("");
+  const [newDescription, setNewDescription] = useState("");
+  const [title, setTitle] = useState("");
+  const [path, setPath] = useState("");
+  const [language, setLanguage] = useState("text");
+  const [kind, setKind] = useState<"code" | "sql" | "workflow" | "document" | "config" | "other">("code");
+  const [content, setContent] = useState("");
+  const [favorite, setFavorite] = useState(false);
+  const verifyAccess = trpc.vault.verifyAccessCode.useMutation({ onSuccess: result => { if (result.ok) { setVaultUnlocked(true); setAccessCode(""); } } });
+
+  useEffect(() => { if (projectId === null && projects[0]) setProjectId(projects[0].id); }, [projects, projectId]);
+  useEffect(() => { setFileId(null); setTitle(""); setPath(""); setLanguage("text"); setKind("code"); setContent(""); setFavorite(false); }, [projectId]);
+  const { data: files = [], isLoading: filesLoading } = trpc.vault.files.useQuery({ projectId: projectId ?? 0, search: search || undefined }, { enabled: vaultUnlocked && (PRESENTATION_MODE || user?.role === "admin") && projectId !== null });
+  const { data: selectedFile } = trpc.vault.file.useQuery({ fileId: fileId ?? 0 }, { enabled: vaultUnlocked && (PRESENTATION_MODE || user?.role === "admin") && fileId !== null });
+  useEffect(() => { if (!selectedFile || selectedFile.id !== fileId) return; setTitle(selectedFile.title); setPath(selectedFile.path); setLanguage(selectedFile.language); setKind(selectedFile.kind); setContent(selectedFile.content); setFavorite(selectedFile.isFavorite); }, [selectedFile, fileId]);
+
+  const selectedProject = useMemo(() => projects.find(project => project.id === projectId), [projects, projectId]);
+  const sqlCount = files.filter(file => file.kind === "sql").length;
+  const workflowCount = files.filter(file => file.kind === "workflow").length;
+  const statCards: Array<{ label: string; value: number; Icon: LucideIcon; tone: string }> = [
+    { label: "โปรเจกต์", value: stats?.projects ?? projects.length, Icon: FolderKanban, tone: "text-fuchsia-300 bg-fuchsia-500/10" },
+    { label: "ไฟล์ทั้งหมด", value: stats?.files ?? files.length, Icon: FileText, tone: "text-fuchsia-300 bg-red-400/10" },
+    { label: "SQL ในมุมมองนี้", value: sqlCount, Icon: Database, tone: "text-emerald-300 bg-emerald-400/10" },
+    { label: "Workflow", value: workflowCount, Icon: CheckCircle2, tone: "text-violet-300 bg-violet-400/10" },
+  ];
+  const createProject = trpc.vault.createProject.useMutation({ onSuccess: project => { if (project) setProjectId(project.id); setNewName(""); setNewDescription(""); utils.vault.projects.invalidate(); utils.vault.stats.invalidate(); } });
+  const createFile = trpc.vault.createFile.useMutation({ onSuccess: file => { if (file) setFileId(file.id); utils.vault.files.invalidate(); utils.vault.stats.invalidate(); } });
+  const updateFile = trpc.vault.updateFile.useMutation({ onSuccess: file => { if (file) setFileId(file.id); utils.vault.files.invalidate(); utils.vault.file.invalidate(); } });
+
+  const startNewFile = () => { setFileId(null); setTitle("ไฟล์ใหม่"); setPath("notes/new-file.txt"); setLanguage("text"); setKind("document"); setContent(""); setFavorite(false); };
+  const saveFile = () => {
+    if (!projectId || !title.trim() || !path.trim()) return;
+    const payload = { projectId, title, path, language, kind, content } as const;
+    if (fileId) updateFile.mutate({ ...payload, fileId, isFavorite: favorite }); else createFile.mutate(payload);
+  };
+
+  if (authLoading && !PRESENTATION_MODE) return <div className="flex min-h-[70vh] items-center justify-center text-sm text-slate-500">กำลังตรวจสอบสิทธิ์…</div>;
+  if ((!user || user.role !== "admin") && !PRESENTATION_MODE) return <div className="flex min-h-[70vh] items-center justify-center"><Card className="max-w-md rounded-3xl border-red-500/20 bg-[#131318] text-center"><CardContent className="space-y-3 p-8"><ShieldCheck className="mx-auto h-9 w-9 text-red-300" /><h1 className="text-xl font-semibold text-white">พื้นที่สำหรับแอดมินเท่านั้น</h1><p className="text-sm leading-6 text-slate-400">บัญชีนี้ไม่มีสิทธิ์เข้าถึงคลัง SQL และโค้ดสำคัญ</p></CardContent></Card></div>;
+  if (!vaultUnlocked) return <div className="flex min-h-[70vh] items-center justify-center"><Card className="w-full max-w-md rounded-3xl border-fuchsia-500/20 bg-[#131318] shadow-2xl shadow-fuchsia-950/20"><CardContent className="space-y-5 p-8"><div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-fuchsia-500/10 text-fuchsia-300"><ShieldCheck className="h-7 w-7" /></div><div className="text-center"><p className="text-[10px] font-semibold uppercase tracking-[0.25em] text-fuchsia-300">SECURE PROJECT VAULT</p><h1 className="mt-2 text-2xl font-semibold text-white">ปลดล็อกคลังโค้ด</h1><p className="mt-2 text-sm leading-6 text-slate-500">เข้าสู่ระบบแอดมินแล้ว กรุณาใส่รหัสคลังเพื่อดู SQL, workflow และ source code</p></div><Input autoFocus type="password" value={accessCode} onChange={event => setAccessCode(event.target.value)} onKeyDown={event => { if (event.key === "Enter" && accessCode) verifyAccess.mutate({ code: accessCode }); }} placeholder="รหัสคลังโค้ด" className="h-11 border-white/10 bg-black/30 text-center tracking-[0.3em] text-white placeholder:tracking-normal placeholder:text-slate-600" /><Button disabled={!accessCode || verifyAccess.isPending} onClick={() => verifyAccess.mutate({ code: accessCode })} className="w-full rounded-xl bg-gradient-to-r from-fuchsia-600 to-violet-600 hover:from-fuchsia-500 hover:to-violet-500">{verifyAccess.isPending ? "กำลังตรวจสอบ…" : "ปลดล็อกคลังโค้ด"}</Button>{verifyAccess.isSuccess && !verifyAccess.data.ok ? <p className="text-center text-xs text-red-300">รหัสไม่ถูกต้อง กรุณาลองใหม่</p> : null}</CardContent></Card></div>;
+
+  return <div className="min-h-[calc(100vh-2rem)] bg-[#09090b] text-white"><div className="mx-auto max-w-[1600px] space-y-5 p-2 sm:p-4 lg:p-6">
+    <header className="relative overflow-hidden rounded-3xl border border-white/10 bg-[#111116] px-6 py-7 shadow-2xl shadow-black/30 sm:px-8"><div className="pointer-events-none absolute -right-20 -top-32 h-72 w-72 rounded-full bg-fuchsia-700/20 blur-3xl" /><div className="pointer-events-none absolute bottom-0 left-1/3 h-32 w-64 rounded-full bg-violet-500/10 blur-3xl" /><div className="relative flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between"><div><div className="mb-4 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.24em] text-fuchsia-300"><Sparkles className="h-4 w-4" /> NIGHTOPS · PROJECT VAULT</div><h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">คลังโปรเจกต์ส่วนตัว</h1><p className="mt-3 max-w-2xl text-sm leading-6 text-slate-400">ศูนย์รวม SQL, โค้ด n8n, Workflow และเอกสารของทุกแอป พร้อมประวัติการแก้ไขและค้นหาไฟล์อย่างเป็นระบบ</p></div><div className="flex items-center gap-3 rounded-2xl border border-fuchsia-400/20 bg-fuchsia-500/5 px-4 py-3 text-sm text-amber-100"><ShieldCheck className="h-5 w-5 text-fuchsia-300" /> พื้นที่ส่วนตัวของคุณ</div></div></header>
+
+    <div className="grid gap-5 lg:grid-cols-[280px_minmax(0,1fr)]"><aside className="space-y-4"><Card className="overflow-hidden rounded-3xl border-white/10 bg-[#131318] shadow-xl shadow-black/20"><CardHeader className="pb-3"><div className="flex items-center justify-between"><CardTitle className="text-base text-white">โปรเจกต์ของคุณ</CardTitle><FolderKanban className="h-5 w-5 text-fuchsia-300" /></div></CardHeader><CardContent className="space-y-2 pt-0">{projectsLoading ? <div className="rounded-2xl bg-black/20 p-4 text-sm text-slate-500">กำลังโหลดโปรเจกต์…</div> : projects.length === 0 ? <div className="rounded-2xl border border-dashed border-white/10 p-4 text-sm leading-6 text-slate-500">ยังไม่มีโปรเจกต์ เริ่มจากฟอร์มด้านล่างได้เลย</div> : projects.map(project => <button key={project.id} onClick={() => setProjectId(project.id)} className={`w-full rounded-2xl p-3 text-left transition-all ${projectId === project.id ? "bg-fuchsia-500/10 ring-1 ring-red-400/40" : "hover:bg-white/[0.03]"}`}><div className="flex items-start gap-3"><div className={`mt-0.5 rounded-xl p-2 ${projectId === project.id ? "bg-red-600 text-white" : "bg-white/5 text-slate-400"}`}><Code2 className="h-4 w-4" /></div><div className="min-w-0"><p className="truncate text-sm font-semibold text-slate-100">{project.name}</p><p className="mt-1 truncate text-xs text-slate-500">{project.category}</p></div></div></button>)}<Separator className="my-4 bg-white/10" /><div className="space-y-2"><p className="text-xs font-semibold uppercase tracking-wider text-fuchsia-300">เพิ่มโปรเจกต์</p><Input value={newName} onChange={event => setNewName(event.target.value)} placeholder="เช่น Telegram Ops" className="border-white/10 bg-black/20 text-white placeholder:text-slate-600" /><Textarea value={newDescription} onChange={event => setNewDescription(event.target.value)} placeholder="คำอธิบายสั้น ๆ" className="min-h-20 resize-none border-white/10 bg-black/20 text-white placeholder:text-slate-600" /><Button className="w-full rounded-xl bg-gradient-to-r from-fuchsia-600 to-violet-600 hover:from-fuchsia-500 hover:to-violet-500" disabled={!newName.trim() || createProject.isPending} onClick={() => createProject.mutate({ name: newName, description: newDescription, category: "e-commerce" })}><Plus className="mr-2 h-4 w-4" />{createProject.isPending ? "กำลังสร้าง…" : "สร้างโปรเจกต์"}</Button></div></CardContent></Card><Card className="rounded-3xl border-fuchsia-400/10 bg-fuchsia-500/[0.04] shadow-xl shadow-black/10"><CardContent className="flex gap-3 p-5"><Database className="mt-0.5 h-5 w-5 shrink-0 text-fuchsia-300" /><div><p className="text-sm font-semibold text-amber-100">โครงสร้างที่แนะนำ</p><p className="mt-1 text-xs leading-5 text-amber-100/60">แยก source/sql, source/n8n และ source/docs ส่วน token จริงให้เก็บใน Secret เท่านั้น</p></div></CardContent></Card></aside>
+
+      <main className="min-w-0 space-y-5"><div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"><div><p className="text-sm font-medium text-fuchsia-300">WORKSPACE / {selectedProject?.category ?? "project"}</p><h2 className="mt-1 text-2xl font-semibold tracking-tight text-white">{selectedProject?.name ?? "เลือกหรือสร้างโปรเจกต์"}</h2><p className="mt-1 text-sm text-slate-500">{selectedProject?.description || "คลังกลางสำหรับรวมหลายแอปและระบบหลังบ้าน"}</p></div><Button onClick={startNewFile} disabled={!projectId} className="rounded-xl bg-gradient-to-r from-fuchsia-600 to-violet-600 shadow-lg shadow-red-950/30 hover:from-fuchsia-500 hover:to-violet-500"><Plus className="mr-2 h-4 w-4" /> ไฟล์ใหม่</Button></div>
+
+        <div className="grid grid-cols-2 gap-3 xl:grid-cols-4">{statCards.map(({ label, value, Icon, tone }) => <Card key={label} className="rounded-2xl border-white/10 bg-[#131318] shadow-xl shadow-black/20"><CardContent className="flex items-center gap-3 p-4"><div className={`rounded-xl p-2.5 ${tone}`}><Icon className="h-4 w-4" /></div><div><p className="text-2xl font-semibold text-white">{value}</p><p className="text-xs text-slate-500">{label}</p></div></CardContent></Card>)}</div>
+
+        <div className="grid gap-5 xl:grid-cols-[minmax(0,0.85fr)_minmax(420px,1.15fr)]"><Card className="overflow-hidden rounded-3xl border-white/10 bg-[#131318] shadow-xl shadow-black/20"><CardHeader className="border-b border-white/10 pb-4"><div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between"><div><CardTitle className="text-base text-white">ไฟล์ในโปรเจกต์</CardTitle><p className="mt-1 text-xs text-slate-500">เลือกไฟล์เพื่อดูหรือแก้ไข</p></div><div className="relative sm:w-44"><Search className="absolute left-3 top-2.5 h-4 w-4 text-slate-500" /><Input value={search} onChange={event => setSearch(event.target.value)} placeholder="ค้นหาไฟล์…" className="rounded-xl border-white/10 bg-black/20 pl-9 text-white placeholder:text-slate-600" /></div></div></CardHeader><CardContent className="p-0"><div className="max-h-[590px] overflow-y-auto">{filesLoading ? <p className="p-6 text-sm text-slate-500">กำลังโหลดไฟล์…</p> : files.length === 0 ? <div className="m-5 rounded-2xl border border-dashed border-white/10 p-8 text-center text-slate-500"><FileText className="mx-auto h-8 w-8 text-slate-700" /><p className="mt-3 text-sm font-medium text-slate-300">ยังไม่มีไฟล์ในโปรเจกต์นี้</p><p className="mt-1 text-xs">กด “ไฟล์ใหม่” หรือ import ไฟล์สำคัญเข้ามา</p></div> : files.map(file => <button key={file.id} onClick={() => setFileId(file.id)} className={`flex w-full items-start gap-3 border-b border-white/5 px-5 py-4 text-left transition-colors ${fileId === file.id ? "bg-fuchsia-500/5" : "hover:bg-white/[0.03]"}`}><div className="mt-0.5 rounded-lg bg-white/5 p-2">{iconFor(file.kind)}</div><div className="min-w-0 flex-1"><div className="flex items-center justify-between gap-2"><p className="truncate text-sm font-semibold text-slate-100">{file.title}</p><Badge variant="outline" className={`shrink-0 text-[10px] ${kindColors[file.kind]}`}>{kindLabels[file.kind]}</Badge></div><p className="mt-1 truncate font-mono text-[11px] text-slate-500">{file.path}</p><p className="mt-2 text-[11px] text-slate-600">แก้ไข {formatDate(file.updatedAt)} · {file.sizeBytes.toLocaleString()} bytes</p></div></button>)}</div></CardContent></Card>
+
+          <Card className="overflow-hidden rounded-3xl border-white/10 bg-[#131318] shadow-xl shadow-black/20 xl:sticky xl:top-5 xl:self-start"><CardHeader className="border-b border-white/10 pb-4"><div className="flex items-center justify-between gap-3"><div><CardTitle className="text-base text-white">ตัวแก้ไขไฟล์</CardTitle><p className="mt-1 text-xs text-slate-500">บันทึกแล้วจะสร้าง revision เมื่อเนื้อหาเปลี่ยน</p></div><Button variant="outline" size="sm" onClick={() => setFavorite(value => !value)} className={favorite ? "border-fuchsia-300/40 bg-fuchsia-500/10 text-fuchsia-200" : "border-white/10 bg-white/5 text-slate-300"}>{favorite ? "★ สำคัญ" : "☆ ปักหมุด"}</Button></div></CardHeader><CardContent className="space-y-3 p-5"><div className="grid gap-3 sm:grid-cols-2"><Input value={title} onChange={event => setTitle(event.target.value)} placeholder="ชื่อไฟล์" className="border-white/10 bg-black/20 text-white placeholder:text-slate-600" /><Input value={path} onChange={event => setPath(event.target.value)} placeholder="path/to/file.sql" className="border-white/10 bg-black/20 font-mono text-white placeholder:text-slate-600" /></div><div className="grid gap-3 sm:grid-cols-[1fr_1.2fr]"><Input value={language} onChange={event => setLanguage(event.target.value)} placeholder="ภาษา เช่น sql, javascript" className="border-white/10 bg-black/20 text-white placeholder:text-slate-600" /><select value={kind} onChange={event => setKind(event.target.value as typeof kind)} className="h-10 rounded-xl border border-white/10 bg-black/20 px-3 text-sm text-slate-200"><option value="code">โค้ด</option><option value="sql">SQL</option><option value="workflow">Workflow</option><option value="document">เอกสาร</option><option value="config">ตั้งค่า</option><option value="other">อื่น ๆ</option></select></div><Textarea value={content} onChange={event => setContent(event.target.value)} placeholder="วาง SQL หรือโค้ดสำคัญที่นี่…" className="min-h-[360px] resize-y rounded-2xl border-white/10 bg-black/40 px-4 py-4 font-mono text-xs leading-5 text-slate-100 placeholder:text-slate-600 focus-visible:ring-fuchsia-500" /><div className="flex items-center justify-between gap-3"><p className="text-xs text-slate-600">{content.length.toLocaleString()} ตัวอักษร</p><Button onClick={saveFile} disabled={!projectId || !title.trim() || !path.trim() || createFile.isPending || updateFile.isPending} className="rounded-xl bg-gradient-to-r from-fuchsia-600 to-violet-600 hover:from-fuchsia-500 hover:to-violet-500"><Save className="mr-2 h-4 w-4" />{createFile.isPending || updateFile.isPending ? "กำลังบันทึก…" : "บันทึกไฟล์"}</Button></div></CardContent></Card></div>
+      </main></div>
+  </div></div>;
+}
